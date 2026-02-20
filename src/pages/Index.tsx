@@ -8,7 +8,6 @@ import WaitlistForm from '@/components/home/WaitlistForm';
 import ProblemSection from '@/components/home/ProblemSection';
 import CTASection from '@/components/home/CTASection';
 import Footer from '@/components/layout/Footer';
-import { MadeWithDyad } from "@/components/made-with-dyad";
 
 const Index = () => {
   return (
@@ -22,7 +21,6 @@ const Index = () => {
         <CTASection />
       </main>
       <Footer />
-      <MadeWithDyad />
     </div>
   );
 };
