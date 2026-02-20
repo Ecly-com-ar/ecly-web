@@ -41,7 +41,7 @@ const Hero = () => {
                   </div>
                   <div className="bg-blue-50 rounded-2xl flex flex-col items-center justify-center p-4 border border-blue-100 transform translate-y-8 hover:scale-105 transition-transform duration-300">
                     <Droplets className="h-10 w-10 text-blue-500 mb-2" />
-                    <span className="text-xs font-bold text-slate-600 text-center">Zero Waste</span>
+                    <span className="text-xs font-bold text-slate-600 text-center">Ahorro de Agua</span>
                   </div>
                   <div className="bg-yellow-50 rounded-2xl flex flex-col items-center justify-center p-4 border border-yellow-100 transform -translate-y-4 hover:scale-105 transition-transform duration-300">
                     <FlaskConical className="h-10 w-10 text-yellow-600 mb-2" />
