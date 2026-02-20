@@ -11,7 +11,7 @@ const Footer = () => {
             <img 
               src="/Ecly - Logotype.png" 
               alt="Ecly Logo" 
-              className="h-10 w-auto object-contain brightness-0 invert" 
+              className="h-12 w-auto object-contain brightness-0 invert" 
             />
           </div>
           <p className="text-slate-400 text-sm">Transformando el consumo para un planeta más limpio.</p>
@@ -41,7 +41,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center text-sm text-slate-500 gap-4">
-        <p>© 2025 Ecly Inc. Todos los derechos reservados.</p>
+        <p>© 2026 Ecly Inc. Todos los derechos reservados.</p>
         <div className="flex gap-6">
           <span className="cursor-pointer hover:text-white transition-colors">Twitter</span>
           <span className="cursor-pointer hover:text-white transition-colors">LinkedIn</span>
