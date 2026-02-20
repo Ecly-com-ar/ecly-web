@@ -1,7 +1,6 @@
 "use client";
 
 import React from 'react';
-import { Recycle } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -9,8 +8,11 @@ const Footer = () => {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="col-span-1 md:col-span-1">
           <div className="flex items-center gap-2 mb-4">
-            <Recycle className="h-8 w-8 text-ecly-green" />
-            <span className="text-lg font-bold">Ecly</span>
+            <img 
+              src="/Ecly - Logotype.png" 
+              alt="Ecly Logo" 
+              className="h-10 w-auto object-contain brightness-0 invert" 
+            />
           </div>
           <p className="text-slate-400 text-sm">Transformando el consumo para un planeta más limpio.</p>
         </div>
