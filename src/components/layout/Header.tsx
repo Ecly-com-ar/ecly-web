@@ -20,9 +20,6 @@ const Header = () => {
         </nav>
 
         <div className="flex items-center gap-4">
-          <button className="text-slate-500 hover:text-slate-700">
-            <Search className="h-5 w-5" />
-          </button>
           <Button className="hidden sm:flex bg-ecly-green hover:bg-green-700 text-white rounded-full px-6">
             Transforma
           </Button>
