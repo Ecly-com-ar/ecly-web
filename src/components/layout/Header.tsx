@@ -16,17 +16,12 @@ const Header = () => {
         <nav className="hidden md:flex items-center gap-8">
           <a className="text-sm font-medium text-slate-600 hover:text-ecly-green transition-colors" href="#">Catálogo</a>
           <a className="text-sm font-medium text-slate-600 hover:text-ecly-green transition-colors" href="#">Nuestra Misión</a>
-          <a className="text-sm font-medium text-slate-600 hover:text-ecly-green transition-colors" href="#">Marcas Asociadas</a>
-          <a className="text-sm font-medium text-slate-600 hover:text-ecly-green transition-colors" href="#">Blog</a>
+          <a className="text-sm font-medium text-slate-600 hover:text-ecly-green transition-colors" href="#">Entidades Asociadas</a>
         </nav>
 
         <div className="flex items-center gap-4">
           <button className="text-slate-500 hover:text-slate-700">
             <Search className="h-5 w-5" />
-          </button>
-          <button className="text-slate-500 hover:text-slate-700 relative">
-            <ShoppingBag className="h-5 w-5" />
-            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-ecly-green text-[10px] font-bold text-white">2</span>
           </button>
           <Button className="hidden sm:flex bg-ecly-green hover:bg-green-700 text-white rounded-full px-6">
             Transforma
