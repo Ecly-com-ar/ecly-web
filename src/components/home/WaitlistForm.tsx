@@ -55,11 +55,13 @@ const WaitlistForm = () => {
               <option value="distribuidora-limpieza">Distribuidora de productos de limpieza</option>
               <option value="supermercado">Supermercado de cercanía</option>
               <option value="tienda-conveniencia">Tienda de conveniencia</option>
+              <option value="Otro">Otro</option>
+              
             </select>
           </div>
 
           <div className="space-y-4">
-            <span className="block text-sm font-semibold leading-6 text-slate-900">Rango de facturación mensual aproximado</span>
+            <span className="block text-sm font-semibold leading-6 text-slate-900">Rango de facturación mensual aproximado en Dólares Estadounidenses</span>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {['Menos de $1,000', '$1,000 - $5,000', '$5,000 - $10,000', 'Más de $10,000'].map((range, idx) => (
                 <label key={idx} className="relative flex cursor-pointer rounded-lg border border-slate-200 bg-white p-4 shadow-sm focus:outline-none hover:border-ecly-green transition-colors">
