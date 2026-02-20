@@ -5,7 +5,7 @@ import { Factory, ShoppingBag, Truck } from 'lucide-react';
 
 const ProblemSection = () => {
   return (
-    <section className="py-24 bg-white overflow-hidden">
+    <section id="problema" className="py-24 bg-white overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
           <div className="relative order-2 lg:order-1">

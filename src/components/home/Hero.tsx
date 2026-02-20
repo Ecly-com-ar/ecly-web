@@ -5,7 +5,7 @@ import { Package, Droplets, FlaskConical, Leaf, Recycle } from 'lucide-react';
 
 const Hero = () => {
   return (
-    <section className="relative overflow-hidden bg-ecly-light py-16 sm:py-24">
+    <section id="inicio" className="relative overflow-hidden bg-ecly-light py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
           <div className="text-center lg:text-left">
@@ -18,12 +18,17 @@ const Hero = () => {
             </p>
             <div className="mx-auto mt-5 max-w-md sm:flex sm:justify-center lg:justify-start md:mt-8 lg:mx-0">
               <div className="rounded-md shadow">
-                <a className="flex w-full items-center justify-center rounded-md border border-transparent bg-ecly-green px-8 py-3 text-base font-medium text-white hover:bg-green-700 md:py-4 md:text-lg md:px-10" href="#catalogo">
-                  Ver Catálogo
+                <a className="flex w-full items-center justify-center rounded-md border border-transparent bg-ecly-green px-8 py-3 text-base font-medium text-white hover:bg-green-700 md:py-4 md:text-lg md:px-10" href="#waitlist">
+                  Solicita ahora
                 </a>
               </div>
               <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
-                <a className="flex w-full items-center justify-center rounded-md border border-transparent bg-white px-8 py-3 text-base font-medium text-ecly-green hover:bg-slate-50 md:py-4 md:text-lg md:px-10" href="#">
+                <a 
+                  className="flex w-full items-center justify-center rounded-md border border-transparent bg-white px-8 py-3 text-base font-medium text-ecly-green hover:bg-slate-50 md:py-4 md:text-lg md:px-10" 
+                  href="https://www.canva.com/design/DAHAfJK3fOw/9oOsUMWcJ3tNi9EEOuBTww/view?utm_content=DAHAfJK3fOw&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h0d873b5d79"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Saber más
                 </a>
               </div>
@@ -41,7 +46,7 @@ const Hero = () => {
                   </div>
                   <div className="bg-blue-50 rounded-2xl flex flex-col items-center justify-center p-4 border border-blue-100 transform translate-y-8 hover:scale-105 transition-transform duration-300">
                     <Droplets className="h-10 w-10 text-blue-500 mb-2" />
-                    <span className="text-xs font-bold text-slate-600 text-center">Ahorro de Agua</span>
+                    <span className="text-xs font-bold text-slate-600 text-center">Zero Waste</span>
                   </div>
                   <div className="bg-yellow-50 rounded-2xl flex flex-col items-center justify-center p-4 border border-yellow-100 transform -translate-y-4 hover:scale-105 transition-transform duration-300">
                     <FlaskConical className="h-10 w-10 text-yellow-600 mb-2" />

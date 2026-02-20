@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Recycle, Search, ShoppingBag, Menu } from 'lucide-react';
+import { Recycle, Menu } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 const Header = () => {
@@ -14,15 +14,18 @@ const Header = () => {
         </div>
         
         <nav className="hidden md:flex items-center gap-8">
-          <a className="text-sm font-medium text-slate-600 hover:text-ecly-green transition-colors" href="#">Catálogo</a>
-          <a className="text-sm font-medium text-slate-600 hover:text-ecly-green transition-colors" href="#">Nuestra Misión</a>
-          <a className="text-sm font-medium text-slate-600 hover:text-ecly-green transition-colors" href="#">Entidades Asociadas</a>
+          <a className="text-sm font-medium text-slate-600 hover:text-ecly-green transition-colors" href="#inicio">Inicio</a>
+          <a className="text-sm font-medium text-slate-600 hover:text-ecly-green transition-colors" href="#problema">El Problema</a>
+          <a className="text-sm font-medium text-slate-600 hover:text-ecly-green transition-colors" href="#entidades">Entidades Asociadas</a>
+          <a className="text-sm font-medium text-slate-600 hover:text-ecly-green transition-colors" href="#waitlist">Inscripción</a>
         </nav>
 
         <div className="flex items-center gap-4">
-          <Button className="hidden sm:flex bg-ecly-green hover:bg-green-700 text-white rounded-full px-6">
-            Transforma
-          </Button>
+          <a href="#waitlist">
+            <Button className="hidden sm:flex bg-ecly-green hover:bg-green-700 text-white rounded-full px-6">
+              Transforma
+            </Button>
+          </a>
           <button className="md:hidden text-slate-500">
             <Menu className="h-6 w-6" />
           </button>
