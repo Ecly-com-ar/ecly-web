@@ -1,0 +1,43 @@
+"use client";
+
+import React from 'react';
+import { Recycle, Search, ShoppingBag, Menu } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+
+const Header = () => {
+  return (
+    <header className="sticky top-0 z-50 w-full border-b border-slate-100 bg-white/80 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-2">
+          <Recycle className="h-8 w-8 text-ecly-green" />
+          <span className="text-xl font-bold tracking-tight text-slate-900">Ecly</span>
+        </div>
+        
+        <nav className="hidden md:flex items-center gap-8">
+          <a className="text-sm font-medium text-slate-600 hover:text-ecly-green transition-colors" href="#">Catálogo</a>
+          <a className="text-sm font-medium text-slate-600 hover:text-ecly-green transition-colors" href="#">Nuestra Misión</a>
+          <a className="text-sm font-medium text-slate-600 hover:text-ecly-green transition-colors" href="#">Marcas Asociadas</a>
+          <a className="text-sm font-medium text-slate-600 hover:text-ecly-green transition-colors" href="#">Blog</a>
+        </nav>
+
+        <div className="flex items-center gap-4">
+          <button className="text-slate-500 hover:text-slate-700">
+            <Search className="h-5 w-5" />
+          </button>
+          <button className="text-slate-500 hover:text-slate-700 relative">
+            <ShoppingBag className="h-5 w-5" />
+            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-ecly-green text-[10px] font-bold text-white">2</span>
+          </button>
+          <Button className="hidden sm:flex bg-ecly-green hover:bg-green-700 text-white rounded-full px-6">
+            Transforma
+          </Button>
+          <button className="md:hidden text-slate-500">
+            <Menu className="h-6 w-6" />
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;
