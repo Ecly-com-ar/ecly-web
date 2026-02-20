@@ -23,7 +23,7 @@ const BrandLogos = () => {
   return (
     <section className="border-y border-slate-100 bg-white py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-        <p className="mb-8 text-sm font-semibold uppercase tracking-wider text-slate-400">Marcas que impulsan el cambio</p>
+        <p className="mb-8 text-sm font-semibold uppercase tracking-wider text-slate-400">Entidades que impulsan el cambio</p>
         
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex items-center opacity-75 grayscale transition-all hover:grayscale-0">
