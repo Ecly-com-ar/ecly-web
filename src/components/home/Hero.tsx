@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Sparkles, ArrowRight, Phone, Mail, User, Store } from 'lucide-react';
+import { Sparkles, ArrowRight, Phone, Mail, User, Store, Send } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
@@ -72,7 +72,7 @@ const Hero = () => {
     
     if (step === 'whatsapp') {
       if (formData.whatsapp.length < 8) {
-        toast.error("Por favor ingresa un número de celular válido");
+        toast.error("Número inválido");
         return;
       }
       setStep('email');
@@ -81,7 +81,7 @@ const Hero = () => {
 
     if (step === 'email') {
       if (!formData.email.includes('@')) {
-        toast.error("Por favor ingresa un email válido");
+        toast.error("Email inválido");
         return;
       }
       setStep('name');
@@ -90,7 +90,7 @@ const Hero = () => {
 
     if (step === 'name') {
       if (formData.name.length < 2) {
-        toast.error("Por favor ingresa tu nombre");
+        toast.error("Ingresa tu nombre");
         return;
       }
       setStep('businessType');
@@ -99,10 +99,10 @@ const Hero = () => {
 
     if (step === 'businessType') {
       if (formData.businessType === "") {
-        toast.error("Por favor selecciona qué identifica mejor a tu negocio");
+        toast.error("Selecciona tu negocio");
         return;
       }
-      toast.success("¡Excelente! Registro completo. Pronto nos pondremos en contacto.");
+      toast.success("¡Registro completo! Pronto nos contactaremos.");
       setFormData({ whatsapp: "", email: "", name: "", businessType: "" });
       setStep('whatsapp');
     }
@@ -153,74 +153,75 @@ const Hero = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
               
-              {/* Formulario de inscripción sobre la imagen - Versión multi-paso */}
-              <div className="absolute bottom-6 left-6 right-6 p-6 bg-white/10 backdrop-blur-xl rounded-[2rem] border border-white/20 shadow-2xl transition-all">
-                <div className="mb-4 flex justify-between items-end">
-                  <div>
-                    <h3 className="text-white text-2xl font-black leading-tight">Inscribite ahora 🚀</h3>
-                    <p className="text-white/80 text-sm font-bold">Se de los primeros</p>
-                  </div>
-                  <div className="text-white/60 text-xs font-black bg-white/10 px-2 py-1 rounded-md">
+              {/* Formulario compacto de una sola fila */}
+              <div className="absolute bottom-4 left-4 right-4 p-4 bg-white/10 backdrop-blur-xl rounded-[1.5rem] border border-white/20 shadow-2xl transition-all">
+                <div className="mb-2 flex justify-between items-center">
+                  <p className="text-white text-xs font-black uppercase tracking-widest opacity-80">
+                    {step === 'whatsapp' ? 'Paso 1: WhatsApp' : 
+                     step === 'email' ? 'Paso 2: Email' : 
+                     step === 'name' ? 'Paso 3: Nombre' : 'Paso 4: Negocio'}
+                  </p>
+                  <div className="text-white/60 text-[10px] font-black bg-white/10 px-2 py-0.5 rounded">
                     {step === 'whatsapp' ? '1/4' : step === 'email' ? '2/4' : step === 'name' ? '3/4' : '4/4'}
                   </div>
                 </div>
 
-                <Progress value={getProgress()} className="h-1 mb-6 bg-white/10" />
+                <Progress value={getProgress()} className="h-1 mb-4 bg-white/10" />
                 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-                  <div className="relative overflow-hidden min-h-[56px]">
+                <form onSubmit={handleSubmit} className="flex flex-row items-center gap-2">
+                  <div className="relative flex-1">
                     {step === 'whatsapp' && (
-                      <div className="animate-in slide-in-from-right duration-300">
-                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/60" />
+                      <div className="animate-in slide-in-from-right duration-300 relative">
+                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
                         <Input 
                           type="tel"
-                          placeholder="Tu celular (WhatsApp)"
+                          placeholder="Tu WhatsApp"
                           value={formData.whatsapp}
                           onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50 font-bold pl-12 h-14 rounded-xl focus-visible:ring-0 focus-visible:ring-offset-0 outline-none"
+                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50 font-bold pl-10 h-12 rounded-xl focus-visible:ring-0 outline-none border-0"
                           required
                         />
                       </div>
                     )}
                     {step === 'email' && (
-                      <div className="animate-in slide-in-from-right duration-300">
-                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/60" />
+                      <div className="animate-in slide-in-from-right duration-300 relative">
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
                         <Input 
                           type="email"
-                          placeholder="Tu correo electrónico"
+                          placeholder="Tu Email"
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50 font-bold pl-12 h-14 rounded-xl focus-visible:ring-0 focus-visible:ring-offset-0 outline-none"
+                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50 font-bold pl-10 h-12 rounded-xl focus-visible:ring-0 outline-none border-0"
                           autoFocus
                           required
                         />
                       </div>
                     )}
                     {step === 'name' && (
-                      <div className="animate-in slide-in-from-right duration-300">
-                        <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/60" />
+                      <div className="animate-in slide-in-from-right duration-300 relative">
+                        <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
                         <Input 
                           type="text"
-                          placeholder="Tu nombre completo"
+                          placeholder="Tu Nombre"
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50 font-bold pl-12 h-14 rounded-xl focus-visible:ring-0 focus-visible:ring-offset-0 outline-none"
+                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50 font-bold pl-10 h-12 rounded-xl focus-visible:ring-0 outline-none border-0"
                           autoFocus
                           required
                         />
                       </div>
                     )}
                     {step === 'businessType' && (
-                      <div className="animate-in slide-in-from-right duration-300">
-                        <Store className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/60" />
+                      <div className="animate-in slide-in-from-right duration-300 relative">
+                        <Store className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
                         <select 
-                          className="flex h-14 w-full items-center justify-between rounded-xl border border-white/20 bg-white/10 px-12 py-2 text-white font-bold focus:outline-none focus:ring-0 appearance-none"
+                          className="flex h-12 w-full items-center justify-between rounded-xl border-0 bg-white/10 pl-10 pr-4 text-white text-sm font-bold focus:outline-none focus:ring-0 appearance-none"
                           value={formData.businessType}
                           onChange={(e) => setFormData({ ...formData, businessType: e.target.value })}
                           autoFocus
                           required
                         >
-                          <option value="" className="text-slate-900">¿Qué identifica mejor a tu negocio?</option>
+                          <option value="" className="text-slate-900">¿Qué es tu negocio?</option>
                           <option value="kiosko" className="text-slate-900">Kiosko</option>
                           <option value="minimercado" className="text-slate-900">Minimercado</option>
                           <option value="almacen" className="text-slate-900">Almacén</option>
@@ -232,9 +233,10 @@ const Hero = () => {
                   </div>
                   <Button 
                     type="submit"
-                    className="bg-ecly-green hover:bg-green-600 text-white font-black text-lg h-14 rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]"
+                    size="icon"
+                    className="bg-ecly-green hover:bg-green-600 text-white h-12 w-12 rounded-xl shadow-lg transition-all shrink-0"
                   >
-                    {step === 'businessType' ? 'Inscribirse' : 'Siguiente'}
+                    {step === 'businessType' ? <Send className="h-5 w-5" /> : <ArrowRight className="h-5 w-5" />}
                   </Button>
                 </form>
               </div>
