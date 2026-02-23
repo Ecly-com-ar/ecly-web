@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Sparkles, ArrowRight, Phone } from 'lucide-react';
+import { Sparkles, ArrowRight, Phone, Mail } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -39,7 +39,11 @@ const benefits = [
 
 const Hero = () => {
   const [currentBenefit, setCurrentBenefit] = useState(0);
-  const [whatsapp, setWhatsapp] = useState("");
+  const [step, setStep] = useState<'whatsapp' | 'email'>('whatsapp');
+  const [formData, setFormData] = useState({
+    whatsapp: "",
+    email: ""
+  });
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -50,12 +54,25 @@ const Hero = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (whatsapp.length < 8) {
-      toast.error("Por favor ingresa un número de celular válido");
+    
+    if (step === 'whatsapp') {
+      if (formData.whatsapp.length < 8) {
+        toast.error("Por favor ingresa un número de celular válido");
+        return;
+      }
+      setStep('email');
       return;
     }
-    toast.success("¡Genial! Ya iniciamos tu inscripción. Te contactaremos por WhatsApp.");
-    setWhatsapp("");
+
+    if (step === 'email') {
+      if (!formData.email.includes('@')) {
+        toast.error("Por favor ingresa un email válido");
+        return;
+      }
+      toast.success("¡Genial! Ya iniciamos tu inscripción. Te contactaremos pronto.");
+      setFormData({ whatsapp: "", email: "" });
+      setStep('whatsapp');
+    }
   };
 
   const benefit = benefits[currentBenefit];
@@ -103,29 +120,47 @@ const Hero = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
               
-              {/* Formulario de inscripción sobre la imagen - Versión alineada */}
-              <div className="absolute bottom-8 left-6 right-6 p-6 bg-white/10 backdrop-blur-xl rounded-[2rem] border border-white/20 shadow-2xl">
+              {/* Formulario de inscripción sobre la imagen - Versión dinámica */}
+              <div className="absolute bottom-8 left-6 right-6 p-6 bg-white/10 backdrop-blur-xl rounded-[2rem] border border-white/20 shadow-2xl transition-all">
                 <div className="mb-4">
                   <h3 className="text-white text-2xl font-black leading-tight">Inscribite ahora 🚀</h3>
-                  <p className="text-white/80 text-sm font-bold">Transformá tu local en minutos</p>
+                  <p className="text-white/80 text-sm font-bold">Se de los primeros</p>
                 </div>
                 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-                  <div className="relative">
-                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/60" />
-                    <Input 
-                      type="tel"
-                      placeholder="Tu celular (WhatsApp)"
-                      value={whatsapp}
-                      onChange={(e) => setWhatsapp(e.target.value)}
-                      className="bg-white/10 border-white/20 text-white placeholder:text-white/50 font-bold pl-12 h-14 rounded-xl focus-visible:ring-ecly-green"
-                    />
+                  <div className="relative overflow-hidden">
+                    {step === 'whatsapp' ? (
+                      <div className="animate-in slide-in-from-right duration-300">
+                        <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/60" />
+                        <Input 
+                          type="tel"
+                          placeholder="Tu celular (WhatsApp)"
+                          value={formData.whatsapp}
+                          onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
+                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50 font-bold pl-12 h-14 rounded-xl focus-visible:ring-ecly-green"
+                          required
+                        />
+                      </div>
+                    ) : (
+                      <div className="animate-in slide-in-from-right duration-300">
+                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/60" />
+                        <Input 
+                          type="email"
+                          placeholder="Tu correo electrónico"
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50 font-bold pl-12 h-14 rounded-xl focus-visible:ring-ecly-green"
+                          autoFocus
+                          required
+                        />
+                      </div>
+                    )}
                   </div>
                   <Button 
                     type="submit"
                     className="bg-ecly-green hover:bg-green-600 text-white font-black text-lg h-14 rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]"
                   >
-                    Inscribirse
+                    {step === 'whatsapp' ? 'Inscribirse' : 'Finalizar registro'}
                   </Button>
                 </form>
               </div>
