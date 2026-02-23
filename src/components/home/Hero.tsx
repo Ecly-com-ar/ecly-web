@@ -177,7 +177,7 @@ const Hero = () => {
                           placeholder="Tu celular (WhatsApp)"
                           value={formData.whatsapp}
                           onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50 font-bold pl-12 h-14 rounded-xl focus-visible:ring-ecly-green"
+                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50 font-bold pl-12 h-14 rounded-xl focus-visible:ring-0 focus-visible:ring-offset-0 outline-none"
                           required
                         />
                       </div>
@@ -190,7 +190,7 @@ const Hero = () => {
                           placeholder="Tu correo electrónico"
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50 font-bold pl-12 h-14 rounded-xl focus-visible:ring-ecly-green"
+                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50 font-bold pl-12 h-14 rounded-xl focus-visible:ring-0 focus-visible:ring-offset-0 outline-none"
                           autoFocus
                           required
                         />
@@ -204,7 +204,7 @@ const Hero = () => {
                           placeholder="Tu nombre completo"
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50 font-bold pl-12 h-14 rounded-xl focus-visible:ring-ecly-green"
+                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50 font-bold pl-12 h-14 rounded-xl focus-visible:ring-0 focus-visible:ring-offset-0 outline-none"
                           autoFocus
                           required
                         />
@@ -214,7 +214,7 @@ const Hero = () => {
                       <div className="animate-in slide-in-from-right duration-300">
                         <Store className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/60" />
                         <select 
-                          className="flex h-14 w-full items-center justify-between rounded-xl border border-white/20 bg-white/10 px-12 py-2 text-white font-bold focus:outline-none focus:ring-2 focus:ring-ecly-green appearance-none"
+                          className="flex h-14 w-full items-center justify-between rounded-xl border border-white/20 bg-white/10 px-12 py-2 text-white font-bold focus:outline-none focus:ring-0 appearance-none"
                           value={formData.businessType}
                           onChange={(e) => setFormData({ ...formData, businessType: e.target.value })}
                           autoFocus

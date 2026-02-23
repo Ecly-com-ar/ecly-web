@@ -41,14 +41,14 @@ const WaitlistForm = () => {
               placeholder="hola@tunegocio.com" 
               required 
               type="email"
-              className="py-8 rounded-2xl border-2 border-slate-200 focus:border-ecly-green text-lg font-bold"
+              className="py-8 rounded-2xl border-2 border-slate-200 focus:border-slate-200 focus-visible:ring-0 focus-visible:ring-offset-0 text-lg font-bold outline-none"
             />
           </div>
 
           <div className="space-y-3">
             <Label htmlFor="business-type" className="text-lg font-black text-slate-900">¿Qué tipo de negocio tienes? 🏪</Label>
             <select 
-              className="flex h-16 w-full items-center justify-between rounded-2xl border-2 border-slate-200 bg-background px-4 py-2 text-lg font-bold focus:outline-none focus:ring-2 focus:ring-ecly-green appearance-none"
+              className="flex h-16 w-full items-center justify-between rounded-2xl border-2 border-slate-200 bg-background px-4 py-2 text-lg font-bold focus:outline-none focus:ring-0 appearance-none"
               id="business-type" 
               name="business-type" 
               required
