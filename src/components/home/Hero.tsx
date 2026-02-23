@@ -1,5 +1,3 @@
-"use client";
-
 import React from 'react';
 import { ShieldCheck, ArrowRight, Zap } from 'lucide-react';
 import { Input } from "@/components/ui/input";
@@ -116,7 +114,7 @@ const Hero = () => {
                   </select>
                 </div>
                 
-                <Button className="w-full h-20 rounded-2xl bg-ecly-green hover:bg-white hover:text-slate-900 text-slate-900 text-xl font-black transition-all transform hover:scale-[1.02] active:scale-95 group">
+                <Button type="submit" className="w-full h-20 rounded-2xl bg-ecly-green hover:bg-white hover:text-slate-900 text-slate-900 text-xl font-black transition-all transform hover:scale-[1.02] active:scale-95 group">
                   ENVIAR SOLICITUD <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </form>
@@ -125,7 +123,7 @@ const Hero = () => {
                 Cupos limitados por zona geográfica
               </p>
             </div>
-          </div>
+          </motion.div>
 
         </div>
       </div>
