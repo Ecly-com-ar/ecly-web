@@ -1,130 +1,71 @@
+"use client";
+
 import React from 'react';
-import { ShieldCheck, ArrowRight, Zap } from 'lucide-react';
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
-import { motion } from "framer-motion";
+import { Package, Droplets, FlaskConical, Leaf, Recycle } from 'lucide-react';
 
 const Hero = () => {
-  const { toast } = useToast();
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast({
-      title: "¡EL CAMBIO EMPIEZA HOY!",
-      description: "Recibimos tu solicitud. Un asesor te contactará pronto.",
-    });
-  };
-
   return (
-    <section className="relative bg-white pt-16 pb-32 overflow-hidden">
-      {/* Círculos de acento modernos */}
-      <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-ecly-green/5 rounded-full blur-[120px] -z-10" />
-      <div className="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[100px] -z-10" />
-      
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid lg:grid-cols-12 gap-16 items-center">
-          
-          {/* Lado Izquierdo: Comunicación Directa */}
-          <div className="lg:col-span-7">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 text-white text-xs font-black uppercase tracking-[0.2em] mb-8"
-            >
-              <ShieldCheck size={14} className="text-ecly-green" /> Triple Impacto Real
-            </motion.div>
-            
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-5xl md:text-8xl font-black text-slate-900 leading-[0.9] tracking-tighter mb-8"
-            >
-              LIDERÁ LA <br />
-              <span className="text-ecly-green">REVOLUCIÓN</span> <br />
-              CIRCULAR.
-            </motion.h1>
-            
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-xl md:text-2xl text-slate-500 font-medium leading-tight max-w-lg mb-10"
-            >
-              Tu comercio es el centro del cambio. Vendé más, reducí residuos y sé el <span className="text-slate-900 font-bold underline decoration-ecly-green decoration-4">primero en tu zona</span>.
-            </motion.p>
-
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.4 }}
-              className="grid grid-cols-2 gap-4 max-w-md"
-            >
-              <div className="border-l-4 border-ecly-green pl-4">
-                <p className="text-3xl font-black text-slate-900">+VENTAS</p>
-                <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">Nuevos Clientes</p>
+    <section id="inicio" className="relative overflow-hidden bg-ecly-light py-16 sm:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
+          <div className="text-center lg:text-left">
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl md:text-6xl">
+              <span className="block">Consumo responsable,</span>
+              <span className="block text-ecly-green">futuro sostenible</span>
+            </h1>
+            <p className="mx-auto mt-3 max-w-md text-base text-slate-600 sm:text-lg md:mt-5 md:max-w-3xl md:text-xl lg:mx-0">
+              Descubre productos envasados con la tecnología circular de Ecly. Reduce plásticos y apoya a las marcas que cuidan el planeta.
+            </p>
+            <div className="mx-auto mt-5 max-w-md sm:flex sm:justify-center lg:justify-start md:mt-8 lg:mx-0">
+              <div className="rounded-md shadow">
+                <a className="flex w-full items-center justify-center rounded-md border border-transparent bg-ecly-green px-8 py-3 text-base font-medium text-white hover:bg-green-700 md:py-4 md:text-lg md:px-10" href="#waitlist">
+                  Solicita ahora
+                </a>
               </div>
-              <div className="border-l-4 border-slate-900 pl-4">
-                <p className="text-3xl font-black text-slate-900">ZERO</p>
-                <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">Residuos</p>
+              <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
+                <a 
+                  className="flex w-full items-center justify-center rounded-md border border-transparent bg-white px-8 py-3 text-base font-medium text-ecly-green hover:bg-slate-50 md:py-4 md:text-lg md:px-10" 
+                  href="https://www.canva.com/design/DAHAfJK3fOw/9oOsUMWcJ3tNi9EEOuBTww/view?utm_content=DAHAfJK3fOw&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h0d873b5d79"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Saber más
+                </a>
               </div>
-            </motion.div>
-          </div>
-
-          {/* Lado Derecho: Formulario "App-Style" */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="lg:col-span-5 relative"
-          >
-            <div className="bg-slate-900 p-8 md:p-12 rounded-[3rem] shadow-[0_32px_64px_-16px_rgba(22,163,74,0.2)]">
-              <div className="flex justify-between items-start mb-10">
-                <div>
-                  <h3 className="text-3xl font-black text-white leading-none">SUMATE</h3>
-                  <p className="text-ecly-green font-bold text-sm uppercase tracking-widest mt-2">Inscripción Express</p>
-                </div>
-                <Zap className="text-ecly-green h-8 w-8 fill-ecly-green" />
-              </div>
-              
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <Input 
-                    placeholder="NOMBRE DEL COMERCIO" 
-                    className="h-16 rounded-2xl bg-slate-800 border-none text-white placeholder:text-slate-500 font-bold focus-visible:ring-2 focus-visible:ring-ecly-green" 
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Input 
-                    type="email" 
-                    placeholder="EMAIL DE CONTACTO" 
-                    className="h-16 rounded-2xl bg-slate-800 border-none text-white placeholder:text-slate-500 font-bold focus-visible:ring-2 focus-visible:ring-ecly-green"
-                    required 
-                  />
-                </div>
-                <div className="space-y-2">
-                  <select className="flex h-16 w-full rounded-2xl bg-slate-800 border-none text-white px-4 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-ecly-green appearance-none">
-                    <option className="bg-slate-900">KIOSKO / ALMACÉN</option>
-                    <option className="bg-slate-900">MINIMERCADO</option>
-                    <option className="bg-slate-900">DISTRIBUIDORA</option>
-                    <option className="bg-slate-900">OTRO</option>
-                  </select>
-                </div>
-                
-                <Button type="submit" className="w-full h-20 rounded-2xl bg-ecly-green hover:bg-white hover:text-slate-900 text-slate-900 text-xl font-black transition-all transform hover:scale-[1.02] active:scale-95 group">
-                  ENVIAR SOLICITUD <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </form>
-              
-              <p className="text-center text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-8">
-                Cupos limitados por zona geográfica
-              </p>
             </div>
-          </motion.div>
-
+          </div>
+          
+          <div className="relative hidden lg:block mt-12 lg:mt-0">
+            <div className="relative w-full aspect-square max-w-lg mx-auto">
+              <div className="absolute inset-0 bg-green-100 rounded-full opacity-30 blur-3xl transform translate-x-10 translate-y-10"></div>
+              <div className="relative h-full w-full bg-white/40 backdrop-blur-sm rounded-3xl border border-white/60 shadow-xl flex items-center justify-center overflow-hidden">
+                <div className="grid grid-cols-2 gap-4 p-8 w-full h-full">
+                  <div className="bg-ecly-light rounded-2xl flex flex-col items-center justify-center p-4 border border-green-100 transform hover:scale-105 transition-transform duration-300">
+                    <Package className="h-10 w-10 text-ecly-green mb-2" />
+                    <span className="text-xs font-bold text-slate-600 text-center">Envases Retornables</span>
+                  </div>
+                  <div className="bg-blue-50 rounded-2xl flex flex-col items-center justify-center p-4 border border-blue-100 transform translate-y-8 hover:scale-105 transition-transform duration-300">
+                    <Droplets className="h-10 w-10 text-blue-500 mb-2" />
+                    <span className="text-xs font-bold text-slate-600 text-center">Zero Waste</span>
+                  </div>
+                  <div className="bg-yellow-50 rounded-2xl flex flex-col items-center justify-center p-4 border border-yellow-100 transform -translate-y-4 hover:scale-105 transition-transform duration-300">
+                    <FlaskConical className="h-10 w-10 text-yellow-600 mb-2" />
+                    <span className="text-xs font-bold text-slate-600 text-center">Tecnología</span>
+                  </div>
+                  <div className="bg-green-50 rounded-2xl flex flex-col items-center justify-center p-4 border border-green-200 transform hover:scale-105 transition-transform duration-300">
+                    <Leaf className="h-10 w-10 text-ecly-dark mb-2" />
+                    <span className="text-xs font-bold text-slate-600 text-center">Circular</span>
+                  </div>
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="bg-white p-4 rounded-full shadow-lg border border-slate-100 flex flex-col items-center">
+                    <Recycle className="h-12 w-12 text-ecly-green animate-pulse" />
+                    <span className="text-black font-bold text-sm mt-1">Ecly</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
