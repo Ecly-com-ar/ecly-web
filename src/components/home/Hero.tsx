@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Sparkles, ArrowRight, ChevronDown } from 'lucide-react';
+import { Sparkles, ArrowRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
 const Hero = () => {
@@ -51,7 +51,7 @@ const Hero = () => {
           <div className="relative max-w-lg mx-auto lg:max-w-none w-full">
             <div className="aspect-[4/3] sm:aspect-video lg:aspect-square xl:aspect-[4/4] rounded-[2.5rem] overflow-hidden shadow-xl border-4 border-white transform lg:rotate-1 hover:rotate-0 transition-all duration-500">
               <img 
-                src="/cly-stand-supermercado.png" 
+                src="/ecly-stand-supermercado.png" 
                 alt="Stand de Ecly en supermercado"
                 className="w-full h-full object-cover"
               />
@@ -71,10 +71,12 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Indicador de scroll */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 opacity-50 hover:opacity-100 transition-opacity cursor-pointer hidden lg:flex">
-          <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Descubrir</span>
-          <ChevronDown className="h-6 w-6 text-ecly-green animate-bounce" />
+        {/* Indicador de scroll rediseñado */}
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-60 hover:opacity-100 transition-opacity cursor-pointer hidden lg:flex">
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Scroll</span>
+          <div className="w-6 h-10 border-2 border-ecly-green rounded-full flex justify-center p-1.5">
+            <div className="w-1.5 h-1.5 bg-ecly-green rounded-full animate-bounce"></div>
+          </div>
         </div>
       </div>
     </section>
