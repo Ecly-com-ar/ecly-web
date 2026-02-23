@@ -1,71 +1,117 @@
 "use client";
 
 import React from 'react';
-import { Package, Droplets, FlaskConical, Leaf, Recycle } from 'lucide-react';
+import { ShieldCheck, Star, ArrowRight } from 'lucide-react';
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 const Hero = () => {
+  const { toast } = useToast();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: "¡Excelente elección!",
+      description: "Pronto te ayudaremos a transformar tu comercio.",
+    });
+  };
+
   return (
-    <section id="inicio" className="relative overflow-hidden bg-ecly-light py-16 sm:py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
-          <div className="text-center lg:text-left">
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl md:text-6xl">
-              <span className="block">Consumo responsable,</span>
-              <span className="block text-ecly-green">futuro sostenible</span>
-            </h1>
-            <p className="mx-auto mt-3 max-w-md text-base text-slate-600 sm:text-lg md:mt-5 md:max-w-3xl md:text-xl lg:mx-0">
-              Descubre productos envasados con la tecnología circular de Ecly. Reduce plásticos y apoya a las marcas que cuidan el planeta.
-            </p>
-            <div className="mx-auto mt-5 max-w-md sm:flex sm:justify-center lg:justify-start md:mt-8 lg:mx-0">
-              <div className="rounded-md shadow">
-                <a className="flex w-full items-center justify-center rounded-md border border-transparent bg-ecly-green px-8 py-3 text-base font-medium text-white hover:bg-green-700 md:py-4 md:text-lg md:px-10" href="#waitlist">
-                  Solicita ahora
-                </a>
-              </div>
-              <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
-                <a 
-                  className="flex w-full items-center justify-center rounded-md border border-transparent bg-white px-8 py-3 text-base font-medium text-ecly-green hover:bg-slate-50 md:py-4 md:text-lg md:px-10" 
-                  href="https://www.canva.com/design/DAHAfJK3fOw/9oOsUMWcJ3tNi9EEOuBTww/view?utm_content=DAHAfJK3fOw&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h0d873b5d79"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Saber más
-                </a>
-              </div>
-            </div>
-          </div>
+    <section className="relative bg-white pt-12 pb-24 overflow-hidden">
+      {/* Elementos decorativos de fondo */}
+      <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[600px] h-[600px] bg-ecly-light rounded-full blur-3xl opacity-50 -z-10" />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
           
-          <div className="relative hidden lg:block mt-12 lg:mt-0">
-            <div className="relative w-full aspect-square max-w-lg mx-auto">
-              <div className="absolute inset-0 bg-green-100 rounded-full opacity-30 blur-3xl transform translate-x-10 translate-y-10"></div>
-              <div className="relative h-full w-full bg-white/40 backdrop-blur-sm rounded-3xl border border-white/60 shadow-xl flex items-center justify-center overflow-hidden">
-                <div className="grid grid-cols-2 gap-4 p-8 w-full h-full">
-                  <div className="bg-ecly-light rounded-2xl flex flex-col items-center justify-center p-4 border border-green-100 transform hover:scale-105 transition-transform duration-300">
-                    <Package className="h-10 w-10 text-ecly-green mb-2" />
-                    <span className="text-xs font-bold text-slate-600 text-center">Envases Retornables</span>
-                  </div>
-                  <div className="bg-blue-50 rounded-2xl flex flex-col items-center justify-center p-4 border border-blue-100 transform translate-y-8 hover:scale-105 transition-transform duration-300">
-                    <Droplets className="h-10 w-10 text-blue-500 mb-2" />
-                    <span className="text-xs font-bold text-slate-600 text-center">Zero Waste</span>
-                  </div>
-                  <div className="bg-yellow-50 rounded-2xl flex flex-col items-center justify-center p-4 border border-yellow-100 transform -translate-y-4 hover:scale-105 transition-transform duration-300">
-                    <FlaskConical className="h-10 w-10 text-yellow-600 mb-2" />
-                    <span className="text-xs font-bold text-slate-600 text-center">Tecnología</span>
-                  </div>
-                  <div className="bg-green-50 rounded-2xl flex flex-col items-center justify-center p-4 border border-green-200 transform hover:scale-105 transition-transform duration-300">
-                    <Leaf className="h-10 w-10 text-ecly-dark mb-2" />
-                    <span className="text-xs font-bold text-slate-600 text-center">Circular</span>
-                  </div>
+          {/* Lado Izquierdo: Propuesta de Valor */}
+          <div className="text-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ecly-green/10 text-ecly-green text-sm font-bold mb-6">
+              <ShieldCheck size={16} /> Empresa de Triple Impacto
+            </div>
+            
+            <h1 className="text-4xl md:text-6xl font-black text-slate-900 leading-[1.1] mb-6">
+              Sumate a la revolución <span className="text-ecly-green">circular</span> en tu barrio.
+            </h1>
+            
+            <p className="text-xl text-slate-600 mb-8 leading-relaxed max-w-xl">
+              Sé el primero en ofrecer productos con tecnología Ecly. Atraé nuevos clientes, reducís residuos y sos parte del cambio real.
+            </p>
+
+            <div className="flex flex-wrap gap-6 mb-12">
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600">
+                  <Star size={20} fill="currentColor" />
                 </div>
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="bg-white p-4 rounded-full shadow-lg border border-slate-100 flex flex-col items-center">
-                    <Recycle className="h-12 w-12 text-ecly-green animate-pulse" />
-                    <span className="text-black font-bold text-sm mt-1">Ecly</span>
-                  </div>
+                <div>
+                  <p className="font-bold text-slate-900">Pionero</p>
+                  <p className="text-xs text-slate-500">Liderá en tu zona</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-ecly-green">
+                  <Star size={20} fill="currentColor" />
+                </div>
+                <div>
+                  <p className="font-bold text-slate-900">+ Sostenible</p>
+                  <p className="text-xs text-slate-500">100% Retornable</p>
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Lado Derecho: Formulario de Inscripción */}
+          <div className="relative">
+            <div className="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-2xl shadow-ecly-green/10 border border-slate-100">
+              <h3 className="text-2xl font-bold text-slate-900 mb-2">Inscribí tu comercio</h3>
+              <p className="text-slate-500 mb-8">Completá los datos y te contactamos en menos de 24hs.</p>
+              
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-sm font-bold text-slate-700 ml-1">Nombre del Comercio</label>
+                  <Input 
+                    placeholder="Ej: Almacén Los Amigos" 
+                    className="h-14 rounded-2xl border-slate-200 focus:ring-ecly-green" 
+                    required
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-bold text-slate-700 ml-1">Email de contacto</label>
+                  <Input 
+                    type="email" 
+                    placeholder="contacto@tucomercio.com" 
+                    className="h-14 rounded-2xl border-slate-200 focus:ring-ecly-green"
+                    required 
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-bold text-slate-700 ml-1">Tipo de Negocio</label>
+                  <select className="flex h-14 w-full rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ecly-green">
+                    <option>Kiosko / Almacén</option>
+                    <option>Minimercado</option>
+                    <option>Distribuidora</option>
+                    <option>Otro</option>
+                  </select>
+                </div>
+                
+                <Button className="w-full h-16 rounded-2xl bg-ecly-green hover:bg-green-700 text-lg font-bold shadow-lg shadow-ecly-green/20 transition-all hover:scale-[1.02] active:scale-95">
+                  Sumate ahora <ArrowRight className="ml-2" />
+                </Button>
+                
+                <p className="text-center text-xs text-slate-400 mt-4">
+                  Unirse a la red de Triple Impacto no tiene costo inicial.
+                </p>
+              </form>
+            </div>
+            
+            {/* Badge de confianza */}
+            <div className="absolute -bottom-6 -right-6 md:right-0 bg-slate-900 text-white p-4 rounded-2xl shadow-xl hidden sm:block">
+              <p className="text-xs font-medium opacity-80 uppercase tracking-widest mb-1">Impacto Real</p>
+              <p className="text-lg font-bold">50% Menos Plástico</p>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
