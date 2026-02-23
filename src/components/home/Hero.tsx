@@ -95,7 +95,7 @@ const Hero = () => {
           </div>
 
           <div className="relative max-w-lg mx-auto lg:max-w-none w-full">
-            <div className="aspect-[4/3] sm:aspect-video lg:aspect-square xl:aspect-[4/4] rounded-[2.5rem] overflow-hidden shadow-xl border-4 border-white transform lg:rotate-1 hover:rotate-0 transition-all duration-500 relative">
+            <div className="aspect-[4/3] sm:aspect-video lg:aspect-square xl:aspect-[4/4] rounded-[2.5rem] overflow-hidden shadow-xl border-4 border-white transition-all duration-500 relative">
               <img 
                 src="/ecly-stand-supermercado.png" 
                 alt="Stand de Ecly en supermercado"
@@ -103,7 +103,7 @@ const Hero = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
               
-              {/* Formulario de inscripción sobre la imagen - Versión mejorada */}
+              {/* Formulario de inscripción sobre la imagen - Versión alineada */}
               <div className="absolute bottom-8 left-6 right-6 p-6 bg-white/10 backdrop-blur-xl rounded-[2rem] border border-white/20 shadow-2xl">
                 <div className="mb-4">
                   <h3 className="text-white text-2xl font-black leading-tight">Inscribite ahora 🚀</h3>
