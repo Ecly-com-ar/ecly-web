@@ -54,11 +54,11 @@ const WaitlistForm = () => {
               required
             >
               <option value="">Selecciona una opción</option>
-              <option value="kiosko">Kiosko con onda</option>
-              <option value="minimercado">Minimercado de barrio</option>
-              <option value="almacen">Almacén tradicional</option>
-              <option value="distribuidora">Distribuidora mayorista</option>
-              <option value="supermercado">Súper de cercanía</option>
+              <option value="kiosko">Kiosko</option>
+              <option value="minimercado">Minimercado</option>
+              <option value="almacen">Almacén</option>
+              <option value="distribuidora">Distribuidora</option>
+              <option value="supermercado">Supermercado</option>
               <option value="Otro">Otro emprendimiento</option>
             </select>
           </div>

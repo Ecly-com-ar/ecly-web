@@ -221,11 +221,11 @@ const Hero = () => {
                           required
                         >
                           <option value="" className="text-slate-900">¿Qué identifica mejor a tu negocio?</option>
-                          <option value="kiosko" className="text-slate-900">Kiosko con onda</option>
-                          <option value="minimercado" className="text-slate-900">Minimercado de barrio</option>
-                          <option value="almacen" className="text-slate-900">Almacén tradicional</option>
-                          <option value="distribuidora" className="text-slate-900">Distribuidora mayorista</option>
-                          <option value="supermercado" className="text-slate-900">Súper de cercanía</option>
+                          <option value="kiosko" className="text-slate-900">Kiosko</option>
+                          <option value="minimercado" className="text-slate-900">Minimercado</option>
+                          <option value="almacen" className="text-slate-900">Almacén</option>
+                          <option value="distribuidora" className="text-slate-900">Distribuidora</option>
+                          <option value="supermercado" className="text-slate-900">Supermercado</option>
                         </select>
                       </div>
                     )}
