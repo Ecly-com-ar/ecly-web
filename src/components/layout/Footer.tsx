@@ -14,33 +14,33 @@ const Footer = () => {
               className="h-12 w-auto object-contain brightness-0 invert" 
             />
           </div>
-          <p className="text-slate-400 text-sm">Transformando el consumo para un planeta más limpio.</p>
+          <p className="text-slate-400 text-sm font-bold">Transformando el consumo para un planeta más limpio.</p>
         </div>
         <div>
-          <h3 className="font-semibold mb-3">Plataforma</h3>
-          <ul className="space-y-2 text-sm text-slate-400">
+          <h3 className="font-black mb-4 uppercase tracking-wider text-ecly-vibrant">Plataforma</h3>
+          <ul className="space-y-2 text-sm text-slate-400 font-bold">
             <li><a className="hover:text-white transition-colors" href="#">Explorar</a></li>
             <li><a className="hover:text-white transition-colors" href="#">Cómo funciona</a></li>
             <li><a className="hover:text-white transition-colors" href="#">Precios</a></li>
           </ul>
         </div>
         <div>
-          <h3 className="font-semibold mb-3">Compañía</h3>
-          <ul className="space-y-2 text-sm text-slate-400">
+          <h3 className="font-black mb-4 uppercase tracking-wider text-ecly-vibrant">Compañía</h3>
+          <ul className="space-y-2 text-sm text-slate-400 font-bold">
             <li><a className="hover:text-white transition-colors" href="#">Sobre nosotros</a></li>
             <li><a className="hover:text-white transition-colors" href="#">Carreras</a></li>
             <li><a className="hover:text-white transition-colors" href="#">Blog</a></li>
           </ul>
         </div>
         <div>
-          <h3 className="font-semibold mb-3">Legal</h3>
-          <ul className="space-y-2 text-sm text-slate-400">
+          <h3 className="font-black mb-4 uppercase tracking-wider text-ecly-vibrant">Legal</h3>
+          <ul className="space-y-2 text-sm text-slate-400 font-bold">
             <li><a className="hover:text-white transition-colors" href="#">Privacidad</a></li>
             <li><a className="hover:text-white transition-colors" href="#">Términos</a></li>
           </ul>
         </div>
       </div>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center text-sm text-slate-500 gap-4">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center text-sm text-slate-500 font-bold gap-4">
         <p>© 2026 Ecly Inc. Todos los derechos reservados.</p>
         <div className="flex gap-6">
           <span className="cursor-pointer hover:text-white transition-colors">Twitter</span>

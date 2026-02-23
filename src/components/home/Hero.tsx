@@ -41,7 +41,7 @@ const Hero = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentBenefit((prev) => (prev + 1) % benefits.length);
-    }, 5000); // Cambio más lento (5 segundos)
+    }, 5000);
     return () => clearInterval(timer);
   }, []);
 
@@ -101,7 +101,6 @@ const Hero = () => {
               </div>
             </div>
             
-            {/* Badge dinámico con transición suave y key para re-animar */}
             <div 
               key={currentBenefit}
               className={`absolute -top-6 -right-2 sm:-right-4 ${benefit.bgColor} ${benefit.textColor} p-4 rounded-full w-28 h-28 sm:w-32 sm:h-32 flex flex-col items-center justify-center text-center font-black -rotate-12 shadow-lg z-20 transition-all duration-1000 animate-in zoom-in-50 fade-in duration-500`}
@@ -110,13 +109,6 @@ const Hero = () => {
               <span className="text-2xl sm:text-3xl leading-none my-0.5">{benefit.value}</span>
               <span className="text-[8px] sm:text-[10px] uppercase tracking-tighter">{benefit.bottom}</span>
             </div>
-          </div>
-        </div>
-
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60 hover:opacity-100 transition-opacity cursor-pointer hidden lg:flex">
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Scroll</span>
-          <div className="w-6 h-10 border-2 border-ecly-green rounded-full flex justify-center p-1.5 shadow-sm">
-            <div className="w-1.5 h-1.5 bg-ecly-green rounded-full animate-bounce"></div>
           </div>
         </div>
       </div>
