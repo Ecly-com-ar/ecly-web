@@ -71,10 +71,10 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Indicador de scroll rediseñado */}
-        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-60 hover:opacity-100 transition-opacity cursor-pointer hidden lg:flex">
+        {/* Indicador de scroll posicionado más abajo */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60 hover:opacity-100 transition-opacity cursor-pointer hidden lg:flex">
           <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Scroll</span>
-          <div className="w-6 h-10 border-2 border-ecly-green rounded-full flex justify-center p-1.5">
+          <div className="w-6 h-10 border-2 border-ecly-green rounded-full flex justify-center p-1.5 shadow-sm">
             <div className="w-1.5 h-1.5 bg-ecly-green rounded-full animate-bounce"></div>
           </div>
         </div>
