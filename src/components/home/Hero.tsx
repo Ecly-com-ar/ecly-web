@@ -51,7 +51,7 @@ const Hero = () => {
           <div className="relative max-w-lg mx-auto lg:max-w-none w-full">
             <div className="aspect-[4/3] sm:aspect-video lg:aspect-square xl:aspect-[4/4] rounded-[2.5rem] overflow-hidden shadow-xl border-4 border-white transform lg:rotate-1 hover:rotate-0 transition-all duration-500">
               <img 
-                src="/cly-stand-supermercado.png" 
+                src="/ecly-stand-supermercado.png" 
                 alt="Stand de Ecly en supermercado"
                 className="w-full h-full object-cover"
               />
