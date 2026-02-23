@@ -3,7 +3,6 @@
 import React from 'react';
 import Header from '@/components/layout/Header';
 import Hero from '@/components/home/Hero';
-import BrandLogos from '@/components/home/BrandLogos';
 import BenefitsSection from '@/components/home/BenefitsSection';
 import ProblemSection from '@/components/home/ProblemSection';
 import Testimonials from '@/components/home/Testimonials';
@@ -17,7 +16,6 @@ const Index = () => {
       <Header />
       <main className="flex-1">
         <Hero />
-        <BrandLogos />
         <BenefitsSection />
         <ProblemSection />
         <Testimonials />
