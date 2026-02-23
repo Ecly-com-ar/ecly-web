@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { Sparkles, ArrowRight, Send } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 
 const benefits = [
   {
@@ -37,6 +39,7 @@ const benefits = [
 
 const Hero = () => {
   const [currentBenefit, setCurrentBenefit] = useState(0);
+  const [whatsapp, setWhatsapp] = useState("");
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -44,6 +47,16 @@ const Hero = () => {
     }, 5000);
     return () => clearInterval(timer);
   }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (whatsapp.length < 8) {
+      toast.error("Por favor ingresa un número válido");
+      return;
+    }
+    toast.success("¡Genial! Te contactaremos pronto por WhatsApp.");
+    setWhatsapp("");
+  };
 
   const benefit = benefits[currentBenefit];
 
@@ -78,26 +91,41 @@ const Hero = () => {
                   Sumate a Ecly ¡YA! <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </a>
-              <a 
-                href="#" 
-                className="text-md font-black text-slate-500 hover:text-ecly-green transition-colors flex items-center gap-2 p-2"
-              >
-                ¿Cómo funciona?
-              </a>
             </div>
           </div>
 
           <div className="relative max-w-lg mx-auto lg:max-w-none w-full">
-            <div className="aspect-[4/3] sm:aspect-video lg:aspect-square xl:aspect-[4/4] rounded-[2.5rem] overflow-hidden shadow-xl border-4 border-white transform lg:rotate-1 hover:rotate-0 transition-all duration-500">
+            <div className="aspect-[4/3] sm:aspect-video lg:aspect-square xl:aspect-[4/4] rounded-[2.5rem] overflow-hidden shadow-xl border-4 border-white transform lg:rotate-1 hover:rotate-0 transition-all duration-500 relative">
               <img 
                 src="/ecly-stand-supermercado.png" 
                 alt="Stand de Ecly en supermercado"
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
-              <div className="absolute bottom-6 left-6 text-white">
-                <p className="text-xl font-black">Tu local, versión 2.0</p>
-                <p className="text-sm font-bold opacity-90">Tecnología Ecly instalada.</p>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+              
+              {/* Formulario minimalista de WhatsApp sobre la imagen */}
+              <div className="absolute bottom-6 left-6 right-6 flex flex-col gap-3">
+                <div className="text-white">
+                  <p className="text-xl font-black leading-tight">Tu local, versión 2.0</p>
+                  <p className="text-sm font-bold opacity-90">Empezá hoy mismo 👇</p>
+                </div>
+                
+                <form onSubmit={handleSubmit} className="flex gap-2 bg-white/10 backdrop-blur-md p-1.5 rounded-2xl border border-white/20">
+                  <Input 
+                    type="tel"
+                    placeholder="Tu WhatsApp..."
+                    value={whatsapp}
+                    onChange={(e) => setWhatsapp(e.target.value)}
+                    className="bg-transparent border-none text-white placeholder:text-white/60 font-bold focus-visible:ring-0 focus-visible:ring-offset-0 h-11"
+                  />
+                  <Button 
+                    type="submit"
+                    size="icon"
+                    className="bg-ecly-green hover:bg-green-600 text-white rounded-xl shrink-0 h-11 w-11 shadow-lg"
+                  >
+                    <Send className="h-5 w-5" />
+                  </Button>
+                </form>
               </div>
             </div>
             
