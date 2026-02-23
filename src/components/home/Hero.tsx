@@ -41,7 +41,7 @@ const Hero = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentBenefit((prev) => (prev + 1) % benefits.length);
-    }, 3000);
+    }, 5000); // Cambio más lento (5 segundos)
     return () => clearInterval(timer);
   }, []);
 
@@ -49,14 +49,12 @@ const Hero = () => {
 
   return (
     <section id="inicio" className="relative overflow-hidden bg-ecly-light py-8 lg:py-12 min-h-[calc(100vh-96px)] flex items-center">
-      {/* Círculos decorativos vibrantes */}
       <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[500px] h-[500px] bg-ecly-vibrant/10 rounded-full blur-[100px]"></div>
       <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[300px] h-[300px] bg-ecly-accent/10 rounded-full blur-[80px]"></div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           
-          {/* Columna 1: Texto y CTAs */}
           <div className="text-left max-w-2xl mx-auto lg:mx-0">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white shadow-sm border border-slate-100 mb-6">
               <Sparkles className="h-4 w-4 text-ecly-accent" />
@@ -89,7 +87,6 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Columna 2: Imagen del stand real */}
           <div className="relative max-w-lg mx-auto lg:max-w-none w-full">
             <div className="aspect-[4/3] sm:aspect-video lg:aspect-square xl:aspect-[4/4] rounded-[2.5rem] overflow-hidden shadow-xl border-4 border-white transform lg:rotate-1 hover:rotate-0 transition-all duration-500">
               <img 
@@ -104,8 +101,11 @@ const Hero = () => {
               </div>
             </div>
             
-            {/* Badge flotante DINÁMICO */}
-            <div className={`absolute -top-6 -right-2 sm:-right-4 ${benefit.bgColor} ${benefit.textColor} p-4 rounded-full w-28 h-28 sm:w-32 sm:h-32 flex flex-col items-center justify-center text-center font-black -rotate-12 shadow-lg animate-float z-20 transition-all duration-500`}>
+            {/* Badge dinámico con transición suave y key para re-animar */}
+            <div 
+              key={currentBenefit}
+              className={`absolute -top-6 -right-2 sm:-right-4 ${benefit.bgColor} ${benefit.textColor} p-4 rounded-full w-28 h-28 sm:w-32 sm:h-32 flex flex-col items-center justify-center text-center font-black -rotate-12 shadow-lg z-20 transition-all duration-1000 animate-in zoom-in-50 fade-in duration-500`}
+            >
               <span className="text-[8px] sm:text-[10px] uppercase tracking-tighter">{benefit.top}</span>
               <span className="text-2xl sm:text-3xl leading-none my-0.5">{benefit.value}</span>
               <span className="text-[8px] sm:text-[10px] uppercase tracking-tighter">{benefit.bottom}</span>
@@ -113,7 +113,6 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Indicador de scroll */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60 hover:opacity-100 transition-opacity cursor-pointer hidden lg:flex">
           <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Scroll</span>
           <div className="w-6 h-10 border-2 border-ecly-green rounded-full flex justify-center p-1.5 shadow-sm">
