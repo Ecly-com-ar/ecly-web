@@ -1,10 +1,11 @@
 "use client";
 
 import React from 'react';
-import { ShieldCheck, Star, ArrowRight } from 'lucide-react';
+import { ShieldCheck, ArrowRight, Zap } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { motion } from "framer-motion";
 
 const Hero = () => {
   const { toast } = useToast();
@@ -12,103 +13,117 @@ const Hero = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast({
-      title: "¡Excelente elección!",
-      description: "Pronto te ayudaremos a transformar tu comercio.",
+      title: "¡EL CAMBIO EMPIEZA HOY!",
+      description: "Recibimos tu solicitud. Un asesor te contactará pronto.",
     });
   };
 
   return (
-    <section className="relative bg-white pt-12 pb-24 overflow-hidden">
-      {/* Elementos decorativos de fondo */}
-      <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[600px] h-[600px] bg-ecly-light rounded-full blur-3xl opacity-50 -z-10" />
+    <section className="relative bg-white pt-16 pb-32 overflow-hidden">
+      {/* Círculos de acento modernos */}
+      <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-ecly-green/5 rounded-full blur-[120px] -z-10" />
+      <div className="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[100px] -z-10" />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid lg:grid-cols-12 gap-16 items-center">
           
-          {/* Lado Izquierdo: Propuesta de Valor */}
-          <div className="text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ecly-green/10 text-ecly-green text-sm font-bold mb-6">
-              <ShieldCheck size={16} /> Empresa de Triple Impacto
-            </div>
+          {/* Lado Izquierdo: Comunicación Directa */}
+          <div className="lg:col-span-7">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 text-white text-xs font-black uppercase tracking-[0.2em] mb-8"
+            >
+              <ShieldCheck size={14} className="text-ecly-green" /> Triple Impacto Real
+            </motion.div>
             
-            <h1 className="text-4xl md:text-6xl font-black text-slate-900 leading-[1.1] mb-6">
-              Sumate a la revolución <span className="text-ecly-green">circular</span> en tu barrio.
-            </h1>
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-5xl md:text-8xl font-black text-slate-900 leading-[0.9] tracking-tighter mb-8"
+            >
+              LIDERÁ LA <br />
+              <span className="text-ecly-green">REVOLUCIÓN</span> <br />
+              CIRCULAR.
+            </motion.h1>
             
-            <p className="text-xl text-slate-600 mb-8 leading-relaxed max-w-xl">
-              Sé el primero en ofrecer productos con tecnología Ecly. Atraé nuevos clientes, reducís residuos y sos parte del cambio real.
-            </p>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-xl md:text-2xl text-slate-500 font-medium leading-tight max-w-lg mb-10"
+            >
+              Tu comercio es el centro del cambio. Vendé más, reducí residuos y sé el <span className="text-slate-900 font-bold underline decoration-ecly-green decoration-4">primero en tu zona</span>.
+            </motion.p>
 
-            <div className="flex flex-wrap gap-6 mb-12">
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600">
-                  <Star size={20} fill="currentColor" />
-                </div>
-                <div>
-                  <p className="font-bold text-slate-900">Pionero</p>
-                  <p className="text-xs text-slate-500">Liderá en tu zona</p>
-                </div>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.4 }}
+              className="grid grid-cols-2 gap-4 max-w-md"
+            >
+              <div className="border-l-4 border-ecly-green pl-4">
+                <p className="text-3xl font-black text-slate-900">+VENTAS</p>
+                <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">Nuevos Clientes</p>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-ecly-green">
-                  <Star size={20} fill="currentColor" />
-                </div>
-                <div>
-                  <p className="font-bold text-slate-900">+ Sostenible</p>
-                  <p className="text-xs text-slate-500">100% Retornable</p>
-                </div>
+              <div className="border-l-4 border-slate-900 pl-4">
+                <p className="text-3xl font-black text-slate-900">ZERO</p>
+                <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">Residuos</p>
               </div>
-            </div>
+            </motion.div>
           </div>
 
-          {/* Lado Derecho: Formulario de Inscripción */}
-          <div className="relative">
-            <div className="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-2xl shadow-ecly-green/10 border border-slate-100">
-              <h3 className="text-2xl font-bold text-slate-900 mb-2">Inscribí tu comercio</h3>
-              <p className="text-slate-500 mb-8">Completá los datos y te contactamos en menos de 24hs.</p>
+          {/* Lado Derecho: Formulario "App-Style" */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="lg:col-span-5 relative"
+          >
+            <div className="bg-slate-900 p-8 md:p-12 rounded-[3rem] shadow-[0_32px_64px_-16px_rgba(22,163,74,0.2)]">
+              <div className="flex justify-between items-start mb-10">
+                <div>
+                  <h3 className="text-3xl font-black text-white leading-none">SUMATE</h3>
+                  <p className="text-ecly-green font-bold text-sm uppercase tracking-widest mt-2">Inscripción Express</p>
+                </div>
+                <Zap className="text-ecly-green h-8 w-8 fill-ecly-green" />
+              </div>
               
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-1.5">
-                  <label className="text-sm font-bold text-slate-700 ml-1">Nombre del Comercio</label>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-2">
                   <Input 
-                    placeholder="Ej: Almacén Los Amigos" 
-                    className="h-14 rounded-2xl border-slate-200 focus:ring-ecly-green" 
+                    placeholder="NOMBRE DEL COMERCIO" 
+                    className="h-16 rounded-2xl bg-slate-800 border-none text-white placeholder:text-slate-500 font-bold focus-visible:ring-2 focus-visible:ring-ecly-green" 
                     required
                   />
                 </div>
-                <div className="space-y-1.5">
-                  <label className="text-sm font-bold text-slate-700 ml-1">Email de contacto</label>
+                <div className="space-y-2">
                   <Input 
                     type="email" 
-                    placeholder="contacto@tucomercio.com" 
-                    className="h-14 rounded-2xl border-slate-200 focus:ring-ecly-green"
+                    placeholder="EMAIL DE CONTACTO" 
+                    className="h-16 rounded-2xl bg-slate-800 border-none text-white placeholder:text-slate-500 font-bold focus-visible:ring-2 focus-visible:ring-ecly-green"
                     required 
                   />
                 </div>
-                <div className="space-y-1.5">
-                  <label className="text-sm font-bold text-slate-700 ml-1">Tipo de Negocio</label>
-                  <select className="flex h-14 w-full rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ecly-green">
-                    <option>Kiosko / Almacén</option>
-                    <option>Minimercado</option>
-                    <option>Distribuidora</option>
-                    <option>Otro</option>
+                <div className="space-y-2">
+                  <select className="flex h-16 w-full rounded-2xl bg-slate-800 border-none text-white px-4 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-ecly-green appearance-none">
+                    <option className="bg-slate-900">KIOSKO / ALMACÉN</option>
+                    <option className="bg-slate-900">MINIMERCADO</option>
+                    <option className="bg-slate-900">DISTRIBUIDORA</option>
+                    <option className="bg-slate-900">OTRO</option>
                   </select>
                 </div>
                 
-                <Button className="w-full h-16 rounded-2xl bg-ecly-green hover:bg-green-700 text-lg font-bold shadow-lg shadow-ecly-green/20 transition-all hover:scale-[1.02] active:scale-95">
-                  Sumate ahora <ArrowRight className="ml-2" />
+                <Button className="w-full h-20 rounded-2xl bg-ecly-green hover:bg-white hover:text-slate-900 text-slate-900 text-xl font-black transition-all transform hover:scale-[1.02] active:scale-95 group">
+                  ENVIAR SOLICITUD <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
-                
-                <p className="text-center text-xs text-slate-400 mt-4">
-                  Unirse a la red de Triple Impacto no tiene costo inicial.
-                </p>
               </form>
-            </div>
-            
-            {/* Badge de confianza */}
-            <div className="absolute -bottom-6 -right-6 md:right-0 bg-slate-900 text-white p-4 rounded-2xl shadow-xl hidden sm:block">
-              <p className="text-xs font-medium opacity-80 uppercase tracking-widest mb-1">Impacto Real</p>
-              <p className="text-lg font-bold">50% Menos Plástico</p>
+              
+              <p className="text-center text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-8">
+                Cupos limitados por zona geográfica
+              </p>
             </div>
           </div>
 
