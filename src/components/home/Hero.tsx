@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Sparkles, ArrowRight, Phone, Mail } from 'lucide-react';
+import { Sparkles, ArrowRight, Phone, Mail, User, Store } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 
 const benefits = [
@@ -37,12 +38,16 @@ const benefits = [
   }
 ];
 
+type Step = 'whatsapp' | 'email' | 'name' | 'businessType';
+
 const Hero = () => {
   const [currentBenefit, setCurrentBenefit] = useState(0);
-  const [step, setStep] = useState<'whatsapp' | 'email'>('whatsapp');
+  const [step, setStep] = useState<Step>('whatsapp');
   const [formData, setFormData] = useState({
     whatsapp: "",
-    email: ""
+    email: "",
+    name: "",
+    businessType: ""
   });
 
   useEffect(() => {
@@ -51,6 +56,16 @@ const Hero = () => {
     }, 5000);
     return () => clearInterval(timer);
   }, []);
+
+  const getProgress = () => {
+    switch (step) {
+      case 'whatsapp': return 25;
+      case 'email': return 50;
+      case 'name': return 75;
+      case 'businessType': return 95;
+      default: return 0;
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,8 +84,26 @@ const Hero = () => {
         toast.error("Por favor ingresa un email válido");
         return;
       }
-      toast.success("¡Genial! Ya iniciamos tu inscripción. Te contactaremos pronto.");
-      setFormData({ whatsapp: "", email: "" });
+      setStep('name');
+      return;
+    }
+
+    if (step === 'name') {
+      if (formData.name.length < 2) {
+        toast.error("Por favor ingresa tu nombre");
+        return;
+      }
+      setStep('businessType');
+      return;
+    }
+
+    if (step === 'businessType') {
+      if (formData.businessType === "") {
+        toast.error("Por favor selecciona qué identifica mejor a tu negocio");
+        return;
+      }
+      toast.success("¡Excelente! Registro completo. Pronto nos pondremos en contacto.");
+      setFormData({ whatsapp: "", email: "", name: "", businessType: "" });
       setStep('whatsapp');
     }
   };
@@ -120,16 +153,23 @@ const Hero = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
               
-              {/* Formulario de inscripción sobre la imagen - Versión dinámica */}
-              <div className="absolute bottom-8 left-6 right-6 p-6 bg-white/10 backdrop-blur-xl rounded-[2rem] border border-white/20 shadow-2xl transition-all">
-                <div className="mb-4">
-                  <h3 className="text-white text-2xl font-black leading-tight">Inscribite ahora 🚀</h3>
-                  <p className="text-white/80 text-sm font-bold">Se de los primeros</p>
+              {/* Formulario de inscripción sobre la imagen - Versión multi-paso */}
+              <div className="absolute bottom-6 left-6 right-6 p-6 bg-white/10 backdrop-blur-xl rounded-[2rem] border border-white/20 shadow-2xl transition-all">
+                <div className="mb-4 flex justify-between items-end">
+                  <div>
+                    <h3 className="text-white text-2xl font-black leading-tight">Inscribite ahora 🚀</h3>
+                    <p className="text-white/80 text-sm font-bold">Se de los primeros</p>
+                  </div>
+                  <div className="text-white/60 text-xs font-black bg-white/10 px-2 py-1 rounded-md">
+                    {step === 'whatsapp' ? '1/4' : step === 'email' ? '2/4' : step === 'name' ? '3/4' : '4/4'}
+                  </div>
                 </div>
+
+                <Progress value={getProgress()} className="h-1 mb-6 bg-white/10" />
                 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-                  <div className="relative overflow-hidden">
-                    {step === 'whatsapp' ? (
+                  <div className="relative overflow-hidden min-h-[56px]">
+                    {step === 'whatsapp' && (
                       <div className="animate-in slide-in-from-right duration-300">
                         <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/60" />
                         <Input 
@@ -141,7 +181,8 @@ const Hero = () => {
                           required
                         />
                       </div>
-                    ) : (
+                    )}
+                    {step === 'email' && (
                       <div className="animate-in slide-in-from-right duration-300">
                         <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/60" />
                         <Input 
@@ -155,12 +196,45 @@ const Hero = () => {
                         />
                       </div>
                     )}
+                    {step === 'name' && (
+                      <div className="animate-in slide-in-from-right duration-300">
+                        <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/60" />
+                        <Input 
+                          type="text"
+                          placeholder="Tu nombre completo"
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50 font-bold pl-12 h-14 rounded-xl focus-visible:ring-ecly-green"
+                          autoFocus
+                          required
+                        />
+                      </div>
+                    )}
+                    {step === 'businessType' && (
+                      <div className="animate-in slide-in-from-right duration-300">
+                        <Store className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/60" />
+                        <select 
+                          className="flex h-14 w-full items-center justify-between rounded-xl border border-white/20 bg-white/10 px-12 py-2 text-white font-bold focus:outline-none focus:ring-2 focus:ring-ecly-green appearance-none"
+                          value={formData.businessType}
+                          onChange={(e) => setFormData({ ...formData, businessType: e.target.value })}
+                          autoFocus
+                          required
+                        >
+                          <option value="" className="text-slate-900">¿Qué identifica mejor a tu negocio?</option>
+                          <option value="kiosko" className="text-slate-900">Kiosko con onda</option>
+                          <option value="minimercado" className="text-slate-900">Minimercado de barrio</option>
+                          <option value="almacen" className="text-slate-900">Almacén tradicional</option>
+                          <option value="distribuidora" className="text-slate-900">Distribuidora mayorista</option>
+                          <option value="supermercado" className="text-slate-900">Súper de cercanía</option>
+                        </select>
+                      </div>
+                    )}
                   </div>
                   <Button 
                     type="submit"
                     className="bg-ecly-green hover:bg-green-600 text-white font-black text-lg h-14 rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]"
                   >
-                    {step === 'whatsapp' ? 'Inscribirse' : 'Finalizar registro'}
+                    {step === 'businessType' ? 'Inscribirse' : 'Siguiente'}
                   </Button>
                 </form>
               </div>
