@@ -25,9 +25,13 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         ecly: {
-          green: "#16a34a",
+          green: "#22c55e",
           light: "#f0fdf4",
           dark: "#14532d",
+          vibrant: "#4ade80",
+          accent: "#fbbf24", // Amarillo vibrante
+          electric: "#3b82f6", // Azul eléctrico
+          pop: "#f43f5e", // Rosa/Rojo para destacar
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -72,10 +76,15 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "float": "float 3s ease-in-out infinite",
       },
     },
   },

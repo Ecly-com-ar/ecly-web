@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, PartyPopper } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -13,74 +13,79 @@ const WaitlistForm = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast({
-      title: "¡Registro exitoso!",
-      description: "Te has unido a nuestra lista de espera. Pronto nos contactaremos contigo.",
+      title: "¡Genial! Ya estás en la lista 🎉",
+      description: "Nos pondremos en contacto muy pronto para transformar tu negocio.",
     });
   };
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 bg-ecly-light" id="waitlist">
-      <div className="mx-auto max-w-2xl text-center bg-white/50 p-8 sm:p-12 rounded-3xl border border-white shadow-sm">
-        <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Únete a la lista de espera para tu negocio</h2>
-        <p className="mt-4 text-lg leading-8 text-slate-600">
-          Incorpora la tecnología de Ecly en tu establecimiento y forma parte de la revolución circular.
+    <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8 bg-white" id="waitlist">
+      <div className="mx-auto max-w-3xl text-center bg-ecly-light p-8 sm:p-16 rounded-[3rem] border-4 border-ecly-vibrant shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-8 opacity-10">
+          <PartyPopper size={120} className="text-ecly-green" />
+        </div>
+
+        <h2 className="text-4xl font-black tracking-tight text-slate-900 sm:text-6xl mb-6">
+          ¡Sumate a Ecly y transforma tu espacio! 🌟
+        </h2>
+        <p className="mt-4 text-xl font-bold text-slate-600 mb-10">
+          ¿Listo para ser el próximo caso de éxito? Déjanos tus datos y nos encargamos del resto.
         </p>
         
-        <form onSubmit={handleSubmit} className="mt-10 space-y-6 text-left">
-          <div className="space-y-2">
-            <Label htmlFor="email" className="font-semibold text-slate-900">Correo electrónico</Label>
+        <form onSubmit={handleSubmit} className="mt-10 space-y-8 text-left max-w-xl mx-auto">
+          <div className="space-y-3">
+            <Label htmlFor="email" className="text-lg font-black text-slate-900">¿Cuál es tu email de contacto? 📧</Label>
             <Input 
               id="email" 
               name="email" 
-              placeholder="ejemplo@empresa.com" 
+              placeholder="hola@tunegocio.com" 
               required 
               type="email"
-              className="py-6 rounded-lg"
+              className="py-8 rounded-2xl border-2 border-slate-200 focus:border-ecly-green text-lg font-bold"
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="business-type" className="font-semibold text-slate-900">Elige el que mejor describa a tu negocio</Label>
+          <div className="space-y-3">
+            <Label htmlFor="business-type" className="text-lg font-black text-slate-900">¿Qué tipo de negocio tienes? 🏪</Label>
             <select 
-              className="flex h-12 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex h-16 w-full items-center justify-between rounded-2xl border-2 border-slate-200 bg-background px-4 py-2 text-lg font-bold focus:outline-none focus:ring-2 focus:ring-ecly-green appearance-none"
               id="business-type" 
               name="business-type" 
               required
             >
               <option value="">Selecciona una opción</option>
-              <option value="kiosko">Kiosko</option>
-              <option value="minimercado">Minimercado</option>
-              <option value="almacen">Almacén</option>
-              <option value="distribuidora-alimentos">Distribuidora de alimentos</option>
-              <option value="distribuidora-limpieza">Distribuidora de productos de limpieza</option>
-              <option value="supermercado">Supermercado de cercanía</option>
-              <option value="tienda-conveniencia">Tienda de conveniencia</option>
-              <option value="Otro">Otro</option>
-              
+              <option value="kiosko">Kiosko con onda</option>
+              <option value="minimercado">Minimercado de barrio</option>
+              <option value="almacen">Almacén tradicional</option>
+              <option value="distribuidora">Distribuidora mayorista</option>
+              <option value="supermercado">Súper de cercanía</option>
+              <option value="Otro">Otro emprendimiento</option>
             </select>
           </div>
 
           <div className="space-y-4">
-            <span className="block text-sm font-semibold leading-6 text-slate-900">Rango de facturación mensual aproximado en Dólares Estadounidenses</span>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <span className="block text-lg font-black text-slate-900">¿Cuánto facturas aproximadamente? (USD) 💰</span>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {['Menos de $1,000', '$1,000 - $5,000', '$5,000 - $10,000', 'Más de $10,000'].map((range, idx) => (
-                <label key={idx} className="relative flex cursor-pointer rounded-lg border border-slate-200 bg-white p-4 shadow-sm focus:outline-none hover:border-ecly-green transition-colors">
+                <label key={idx} className="relative flex cursor-pointer rounded-2xl border-2 border-slate-200 bg-white p-5 shadow-sm hover:border-ecly-green transition-all peer-checked:bg-ecly-light">
                   <input className="sr-only peer" name="billing-range" type="radio" value={range.toLowerCase().replace(/ /g, '-')} />
                   <span className="flex flex-1">
-                    <span className="flex flex-col">
-                      <span className="block text-sm font-medium text-slate-900">{range}</span>
-                    </span>
+                    <span className="text-md font-black text-slate-900">{range}</span>
                   </span>
-                  <CheckCircle2 className="h-5 w-5 text-ecly-green opacity-0 peer-checked:opacity-100 transition-opacity" />
-                  <span aria-hidden="true" className="pointer-events-none absolute -inset-px rounded-lg border-2 border-transparent peer-checked:border-ecly-green"></span>
+                  <CheckCircle2 className="h-6 w-6 text-ecly-green opacity-0 peer-checked:opacity-100 transition-opacity" />
+                  <span aria-hidden="true" className="pointer-events-none absolute -inset-px rounded-2xl border-2 border-transparent peer-checked:border-ecly-green"></span>
                 </label>
               ))}
             </div>
           </div>
 
-          <Button type="submit" className="w-full py-7 text-lg font-bold bg-ecly-green hover:bg-green-700 shadow-lg transform transition-all hover:-translate-y-0.5">
-            Unirse a la lista de espera
+          <Button type="submit" className="w-full py-10 text-2xl font-black bg-ecly-green hover:bg-green-600 text-white rounded-[2rem] shadow-[0_12px_0_0_#16a34a] hover:translate-y-1 transition-all active:translate-y-2">
+            ¡Quiero empezar ya! 🚀
           </Button>
+          
+          <p className="text-center text-sm font-bold text-slate-400">
+            * No spam, solo soluciones reales para tu negocio.
+          </p>
         </form>
       </div>
     </section>
