@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { CheckCircle2, PartyPopper } from 'lucide-react';
+import { CheckCircle2, PartyPopper, MapPin, Store } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -26,15 +26,26 @@ const WaitlistForm = () => {
         </div>
 
         <h2 className="text-4xl font-black tracking-tight text-slate-900 sm:text-6xl mb-6">
-          ¡Sumate a Ecly y transforma tu espacio! 🌟
+          Sumá tu comercio a Ecly 🌟
         </h2>
         <p className="mt-4 text-xl font-bold text-slate-600 mb-10">
-          ¿Listo para ser el próximo caso de éxito? Déjanos tus datos y nos encargamos del resto.
+          Completá el formulario y participá del lanzamiento en tu zona. Preinscripción gratuita y sin compromiso.
         </p>
         
         <form onSubmit={handleSubmit} className="mt-10 space-y-8 text-left max-w-xl mx-auto">
           <div className="space-y-3">
-            <Label htmlFor="email" className="text-lg font-black text-slate-900">¿Cuál es tu email de contacto? 📧</Label>
+            <Label htmlFor="name" className="text-lg font-black text-slate-900">Tu nombre completo 👋</Label>
+            <Input 
+              id="name" 
+              name="name" 
+              placeholder="Juan Pérez" 
+              required 
+              className="py-8 rounded-2xl border-2 border-slate-200 focus:border-slate-200 focus-visible:ring-0 focus-visible:ring-offset-0 text-lg font-bold outline-none"
+            />
+          </div>
+
+          <div className="space-y-3">
+            <Label htmlFor="email" className="text-lg font-black text-slate-900">Email de contacto 📧</Label>
             <Input 
               id="email" 
               name="email" 
@@ -46,14 +57,28 @@ const WaitlistForm = () => {
           </div>
 
           <div className="space-y-3">
-            <Label htmlFor="business-type" className="text-lg font-black text-slate-900">¿Qué tipo de negocio tienes? 🏪</Label>
+            <Label htmlFor="whatsapp" className="text-lg font-black text-slate-900">WhatsApp de contacto 📱</Label>
+            <Input 
+              id="whatsapp" 
+              name="whatsapp" 
+              placeholder="351 1234567" 
+              required 
+              type="tel"
+              className="py-8 rounded-2xl border-2 border-slate-200 focus:border-slate-200 focus-visible:ring-0 focus-visible:ring-offset-0 text-lg font-bold outline-none"
+            />
+          </div>
+
+          <div className="space-y-3">
+            <Label htmlFor="business-type" className="text-lg font-black text-slate-900 flex items-center gap-2">
+              <Store className="h-5 w-5" /> ¿Qué tipo de negocio tienes?
+            </Label>
             <select 
               className="flex h-16 w-full items-center justify-between rounded-2xl border-2 border-slate-200 bg-background px-4 py-2 text-lg font-bold focus:outline-none focus:ring-0 appearance-none"
               id="business-type" 
               name="business-type" 
               required
             >
-              <option value="">Selecciona una opción</option>
+              <option value="">Selecciona un tipo</option>
               <option value="kiosko">Kiosko</option>
               <option value="minimercado">Minimercado</option>
               <option value="almacen">Almacén</option>
@@ -63,28 +88,30 @@ const WaitlistForm = () => {
             </select>
           </div>
 
-          <div className="space-y-4">
-            <span className="block text-lg font-black text-slate-900">¿Cuánto facturas aproximadamente? (USD) 💰</span>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {['Menos de $1,000', '$1,000 - $5,000', '$5,000 - $10,000', 'Más de $10,000'].map((range, idx) => (
-                <label key={idx} className="relative flex cursor-pointer rounded-2xl border-2 border-slate-200 bg-white p-5 shadow-sm hover:border-ecly-green transition-all peer-checked:bg-ecly-light">
-                  <input className="sr-only peer" name="billing-range" type="radio" value={range.toLowerCase().replace(/ /g, '-')} />
-                  <span className="flex flex-1">
-                    <span className="text-md font-black text-slate-900">{range}</span>
-                  </span>
-                  <CheckCircle2 className="h-6 w-6 text-ecly-green opacity-0 peer-checked:opacity-100 transition-opacity" />
-                  <span aria-hidden="true" className="pointer-events-none absolute -inset-px rounded-2xl border-2 border-transparent peer-checked:border-ecly-green"></span>
-                </label>
-              ))}
-            </div>
+          <div className="space-y-3">
+            <Label htmlFor="zone" className="text-lg font-black text-slate-900 flex items-center gap-2">
+              <MapPin className="h-5 w-5" /> ¿En qué zona se encuentra?
+            </Label>
+            <select 
+              className="flex h-16 w-full items-center justify-between rounded-2xl border-2 border-slate-200 bg-background px-4 py-2 text-lg font-bold focus:outline-none focus:ring-0 appearance-none"
+              id="zone" 
+              name="zone" 
+              required
+            >
+              <option value="">Selecciona tu zona</option>
+              <option value="sur">Zona Sur</option>
+              <option value="norte">Zona Norte</option>
+              <option value="centro">Zona Centro</option>
+              <option value="otro">Otro</option>
+            </select>
           </div>
 
           <Button type="submit" className="w-full py-10 text-2xl font-black bg-ecly-green hover:bg-green-600 text-white rounded-[2rem] shadow-[0_12px_0_0_#16a34a] hover:translate-y-1 transition-all active:translate-y-2">
-            ¡Quiero empezar ya! 🚀
+            ¡Quiero sumar mi comercio! 🚀
           </Button>
           
           <p className="text-center text-sm font-bold text-slate-400">
-            * No spam, solo soluciones reales para tu negocio.
+            * Al enviar, aceptas participar de la fase de lanzamiento en Córdoba.
           </p>
         </form>
       </div>

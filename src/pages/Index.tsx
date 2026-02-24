@@ -5,7 +5,7 @@ import Header from '@/components/layout/Header';
 import Hero from '@/components/home/Hero';
 import BenefitsSection from '@/components/home/BenefitsSection';
 import ProblemSection from '@/components/home/ProblemSection';
-import Testimonials from '@/components/home/Testimonials';
+import FAQSection from '@/components/home/FAQSection';
 import WaitlistForm from '@/components/home/WaitlistForm';
 import CTASection from '@/components/home/CTASection';
 import Footer from '@/components/layout/Footer';
@@ -18,7 +18,7 @@ const Index = () => {
         <Hero />
         <BenefitsSection />
         <ProblemSection />
-        <Testimonials />
+        <FAQSection />
         <WaitlistForm />
         <CTASection />
       </main>
