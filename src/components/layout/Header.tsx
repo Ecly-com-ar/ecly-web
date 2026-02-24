@@ -1,9 +1,15 @@
 "use client";
 
-import React from 'react';
-import { Menu } from 'lucide-react';
+import React, { useState } from 'react';
+import { Menu, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Link } from 'react-router-dom';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+} from "@/components/ui/sheet";
 
 const Header = () => {
   return (
@@ -19,6 +25,7 @@ const Header = () => {
           </Link>
         </div>
         
+        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-10">
           <Link className="text-base font-black text-slate-600 hover:text-ecly-green transition-colors" to="/">Inicio</Link>
           <a className="text-base font-black text-slate-600 hover:text-ecly-green transition-colors" href="/#problema">El Problema</a>
@@ -32,9 +39,52 @@ const Header = () => {
               Quiero sumar mi comercio
             </Button>
           </a>
-          <button className="md:hidden text-slate-500">
-            <Menu className="h-8 w-8" />
-          </button>
+          
+          {/* Mobile Navigation */}
+          <div className="md:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <button className="text-slate-900 p-2">
+                  <Menu className="h-8 w-8" />
+                </button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] sm:w-[400px] border-l-0 bg-white p-0">
+                <div className="flex flex-col h-full">
+                  <div className="p-6 border-b border-slate-100">
+                    <img 
+                      src="/Ecly - Logotype.png" 
+                      alt="Ecly Logo" 
+                      className="h-12 w-auto object-contain"
+                    />
+                  </div>
+                  <nav className="flex flex-col gap-6 p-8">
+                    <SheetClose asChild>
+                      <Link className="text-2xl font-black text-slate-900 hover:text-ecly-green transition-colors" to="/">Inicio</Link>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <a className="text-2xl font-black text-slate-900 hover:text-ecly-green transition-colors" href="/#problema">El Problema</a>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <a className="text-2xl font-black text-slate-900 hover:text-ecly-green transition-colors" href="/#waitlist">Inscripción</a>
+                    </SheetClose>
+                    <SheetClose asChild>
+                      <Link className="text-2xl font-black text-slate-900 hover:text-ecly-green transition-colors" to="/quienes-somos">Quiénes Somos</Link>
+                    </SheetClose>
+                    
+                    <div className="mt-8">
+                      <SheetClose asChild>
+                        <a href="#waitlist">
+                          <Button className="w-full bg-ecly-green hover:bg-green-700 text-white rounded-2xl py-8 text-xl font-black shadow-lg">
+                            Sumar mi comercio
+                          </Button>
+                        </a>
+                      </SheetClose>
+                    </div>
+                  </nav>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </div>
     </header>
