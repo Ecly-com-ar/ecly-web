@@ -20,7 +20,7 @@ const Header = () => {
             <img 
               src="/Ecly - Logotype.png" 
               alt="Ecly Logo" 
-              className="h-16 w-auto object-contain border-none outline-none ring-0 shadow-none bg-transparent"
+              className="h-16 w-auto object-contain border-none outline-none ring-0 shadow-none"
               style={{ border: 'none', outline: 'none', boxShadow: 'none' }}
             />
           </Link>
