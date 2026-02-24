@@ -7,12 +7,11 @@ const Footer = () => {
     <footer className="bg-slate-900 text-white py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="col-span-1 md:col-span-1">
-          <div className="flex items-center gap-2 mb-4">
-            {/* Usamos el mismo logo que en la navbar sin filtros adicionales */}
+          <div className="flex items-center mb-4">
             <img 
               src="/Ecly - Logotype.png" 
               alt="Ecly Logo" 
-              className="h-12 w-auto object-contain" 
+              className="h-12 w-auto object-contain border-0" 
             />
           </div>
           <p className="text-slate-400 text-sm font-bold">Transformando el consumo para un planeta más limpio.</p>

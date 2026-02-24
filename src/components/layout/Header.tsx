@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import React from 'react';
+import { Menu } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Link } from 'react-router-dom';
 import {
@@ -13,14 +13,14 @@ import {
 
 const Header = () => {
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-slate-100">
       <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-2">
-          <Link to="/">
+        <div className="flex items-center">
+          <Link to="/" className="block border-none outline-none">
             <img 
               src="/Ecly - Logotype.png" 
               alt="Ecly Logo" 
-              className="h-16 w-auto object-contain"
+              className="h-16 w-auto object-contain border-0"
             />
           </Link>
         </div>
@@ -35,7 +35,7 @@ const Header = () => {
 
         <div className="flex items-center gap-4">
           <a href="#waitlist">
-            <Button className="hidden lg:flex bg-ecly-green hover:bg-green-700 text-white rounded-full px-8 py-6 text-lg font-black shadow-lg hover:translate-y-0.5 transition-all">
+            <Button className="hidden lg:flex bg-ecly-green hover:bg-green-700 text-white rounded-full px-8 py-6 text-lg font-black shadow-lg hover:translate-y-0.5 transition-all border-none">
               Quiero sumar mi comercio
             </Button>
           </a>
@@ -44,7 +44,7 @@ const Header = () => {
           <div className="md:hidden">
             <Sheet>
               <SheetTrigger asChild>
-                <button className="text-slate-900 p-2">
+                <button className="text-slate-900 p-2 border-none outline-none">
                   <Menu className="h-8 w-8" />
                 </button>
               </SheetTrigger>
@@ -54,7 +54,7 @@ const Header = () => {
                     <img 
                       src="/Ecly - Logotype.png" 
                       alt="Ecly Logo" 
-                      className="h-12 w-auto object-contain"
+                      className="h-12 w-auto object-contain border-0"
                     />
                   </div>
                   <nav className="flex flex-col gap-6 p-8">
@@ -74,7 +74,7 @@ const Header = () => {
                     <div className="mt-8">
                       <SheetClose asChild>
                         <a href="#waitlist">
-                          <Button className="w-full bg-ecly-green hover:bg-green-700 text-white rounded-2xl py-8 text-xl font-black shadow-lg">
+                          <Button className="w-full bg-ecly-green hover:bg-green-700 text-white rounded-2xl py-8 text-xl font-black shadow-lg border-none">
                             Sumar mi comercio
                           </Button>
                         </a>
