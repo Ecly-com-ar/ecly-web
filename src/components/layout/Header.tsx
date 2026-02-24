@@ -16,7 +16,7 @@ const Header = () => {
     <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b">
       <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center">
-          <Link to="/" className="border-none outline-none focus:ring-0 focus:outline-none">
+          <Link to="/" className="border-none outline-none focus:ring-0 object-contain border-0 focus:outline-none">
           <img 
             src="/Ecly - Logotype.png" 
             alt="Ecly Logo" 
