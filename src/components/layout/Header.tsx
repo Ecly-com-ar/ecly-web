@@ -13,15 +13,16 @@ import {
 
 const Header = () => {
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b">
+    <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-slate-100">
       <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center">
-          <Link to="/" className="border-none outline-none focus:ring-0 object-contain border-0 focus:outline-none">
-          <img 
-            src="/Ecly - Logotype.png" 
-            alt="Ecly Logo" 
-            className="h-16 w-auto object-contain border-0"
-          />
+          <Link to="/" className="block border-none outline-none focus:ring-0 focus:outline-none">
+            <img 
+              src="/Ecly_Logotype.png" 
+              alt="Ecly Logo" 
+              className="h-14 w-auto object-contain border-none outline-none ring-0 shadow-none bg-transparent"
+              style={{ border: 'none', outline: 'none', boxShadow: 'none' }}
+            />
           </Link>
         </div>
         
@@ -52,9 +53,9 @@ const Header = () => {
                 <div className="flex flex-col h-full">
                   <div className="p-6 border-b border-slate-100">
                     <img 
-                      src="/Ecly - Logotype.png" 
+                      src="/Ecly_Logotype.png" 
                       alt="Ecly Logo" 
-                      className="h-12 w-auto object-contain border-none outline-none"
+                      className="h-10 w-auto object-contain border-none outline-none"
                     />
                   </div>
                   <nav className="flex flex-col gap-6 p-8">

@@ -9,9 +9,9 @@ const Footer = () => {
         <div className="col-span-1 md:col-span-1">
           <div className="flex items-center mb-4">
             <img 
-              src="/Ecly - Logotype.png" 
+              src="/Ecly_Logotype.png" 
               alt="Ecly Logo" 
-              className="h-12 w-auto object-contain border-0" 
+              className="h-10 w-auto object-contain border-0" 
             />
           </div>
           <p className="text-slate-400 text-sm font-bold">Transformando el consumo para un planeta más limpio.</p>
@@ -27,7 +27,7 @@ const Footer = () => {
         <div>
           <h3 className="font-black mb-4 uppercase tracking-wider text-ecly-vibrant">Compañía</h3>
           <ul className="space-y-2 text-sm text-slate-400 font-bold">
-            <li><a className="hover:text-white transition-colors" href="#">Sobre nosotros</a></li>
+            <li><a className="hover:text-white transition-colors" href="/quienes-somos">Sobre nosotros</a></li>
             <li><a className="hover:text-white transition-colors" href="#">Carreras</a></li>
             <li><a className="hover:text-white transition-colors" href="#">Blog</a></li>
           </ul>
