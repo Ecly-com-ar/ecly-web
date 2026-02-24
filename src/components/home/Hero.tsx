@@ -18,7 +18,7 @@ const benefits = [
   {
     top: "Elimina el",
     value: "100%",
-    bottom: "plástico descartable",
+    bottom: "del plástico descartable",
     bgColor: "bg-ecly-vibrant",
     textColor: "text-ecly-dark"
   }
