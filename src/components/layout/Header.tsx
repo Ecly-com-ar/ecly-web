@@ -17,12 +17,12 @@ const Header = () => {
       <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center">
           <Link to="/" className="border-none outline-none focus:ring-0 focus:outline-none">
-            <img 
-              src="/Ecly - Logotype.png" 
-              alt="Ecly Logo" 
-              className="h-16 w-auto object-contain border-none outline-none ring-0 shadow-none"
-              style={{ border: 'none', outline: 'none', boxShadow: 'none' }}
-            />
+          <img 
+            src="/Ecly - Logotype.png" 
+            alt="Ecly Logo" 
+            className="h-16 w-auto object-contain"
+            style={{ border: 'none !important', outline: 'none !important', boxShadow: 'none !important' }}
+          />
           </Link>
         </div>
         
