@@ -13,7 +13,7 @@ const WaitlistForm = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast({
-      title: "¡Genial! Ya estás en la lista 🎉",
+      title: "¡Genial! Ya estás en la lista",
       description: "Nos pondremos en contacto muy pronto para transformar tu negocio.",
     });
   };
@@ -34,7 +34,7 @@ const WaitlistForm = () => {
         
         <form onSubmit={handleSubmit} className="mt-10 space-y-8 text-left max-w-xl mx-auto">
           <div className="space-y-3">
-            <Label htmlFor="name" className="text-lg font-black text-slate-900">Tu nombre completo 👋</Label>
+            <Label htmlFor="name" className="text-lg font-black text-slate-900">Tu nombre completo</Label>
             <Input 
               id="name" 
               name="name" 
@@ -45,7 +45,7 @@ const WaitlistForm = () => {
           </div>
 
           <div className="space-y-3">
-            <Label htmlFor="email" className="text-lg font-black text-slate-900">Email de contacto 📧</Label>
+            <Label htmlFor="email" className="text-lg font-black text-slate-900">Email de contacto</Label>
             <Input 
               id="email" 
               name="email" 
@@ -57,7 +57,7 @@ const WaitlistForm = () => {
           </div>
 
           <div className="space-y-3">
-            <Label htmlFor="whatsapp" className="text-lg font-black text-slate-900">WhatsApp de contacto 📱</Label>
+            <Label htmlFor="whatsapp" className="text-lg font-black text-slate-900">WhatsApp de contacto</Label>
             <Input 
               id="whatsapp" 
               name="whatsapp" 
@@ -107,7 +107,7 @@ const WaitlistForm = () => {
           </div>
 
           <Button type="submit" className="w-full py-6 sm:py-10 text-xl sm:text-2xl font-black bg-ecly-green hover:bg-green-600 text-white rounded-[2rem] shadow-[0_12px_0_0_#16a34a] hover:translate-y-1 transition-all active:translate-y-2 whitespace-normal h-auto text-center leading-tight">
-            Quiero tener Ecly en mi local 🚀
+            Quiero tener Ecly en mi local
           </Button>
           
           <p className="text-center text-sm font-bold text-slate-400">
