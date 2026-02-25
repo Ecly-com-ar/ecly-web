@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { PartyPopper, MapPin, Store } from 'lucide-react';
+import { PartyPopper, MapPin, Store } from 'lucide-center';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
