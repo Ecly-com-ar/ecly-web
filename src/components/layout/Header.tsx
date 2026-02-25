@@ -18,10 +18,9 @@ const Header = () => {
   const handleNavigation = (path: string, isHash: boolean = false) => {
     setIsOpen(false);
     
-    // Si es un hash y ya estamos en la home, el navegador se encarga
-    // Si no, navegamos a la ruta
+    // Si es un hash y ya estamos en la home
     if (isHash && location.pathname === '/') {
-      // Dejamos que el comportamiento natural del anchor funcione tras cerrar el menú
+      // El navegador se encargará del scroll suave
       return;
     }
     
@@ -66,7 +65,11 @@ const Header = () => {
                   <Menu className="h-8 w-8" />
                 </button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px] border-l-0 bg-white p-0">
+              <SheetContent 
+                side="right" 
+                className="w-[300px] sm:w-[400px] border-l-0 bg-white p-0"
+                onCloseAutoFocus={(e) => e.preventDefault()}
+              >
                 <div className="flex flex-col h-full">
                   <div className="p-6 border-b border-slate-100">
                     <img 
