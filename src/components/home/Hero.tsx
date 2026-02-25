@@ -132,7 +132,7 @@ const Hero = () => {
             <div className="flex flex-col items-start gap-3">
               <a href="#waitlist" className="w-full sm:w-auto">
                 <Button className="w-full bg-ecly-green hover:bg-green-600 text-white text-lg font-black py-6 px-8 rounded-2xl shadow-[0_8px_0_0_#16a34a] hover:shadow-[0_4px_0_0_#16a34a] transition-all hover:translate-y-1 active:translate-y-2">
-                  Quiero sumar mi comercio <ArrowRight className="ml-2 h-5 w-5" />
+                  Quiero tener Ecly en mi local <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </a>
               <p className="text-sm font-black text-slate-400 pl-2">
@@ -153,7 +153,7 @@ const Hero = () => {
               <div className="absolute bottom-4 left-4 right-4 p-4 bg-white/10 backdrop-blur-xl rounded-[1.5rem] border border-white/20 shadow-2xl transition-all">
                 <div className="mb-2 flex justify-between items-center">
                   <p className="text-white text-xs font-black uppercase tracking-widest opacity-80">
-                    Sumá tu comercio a Ecly
+                    Tener Ecly en mi local
                   </p>
                   <div className="text-white/60 text-[10px] font-black bg-white/10 px-2 py-0.5 rounded">
                     {step === 'whatsapp' ? '1/5' : step === 'email' ? '2/5' : step === 'name' ? '3/5' : step === 'businessType' ? '4/5' : '5/5'}

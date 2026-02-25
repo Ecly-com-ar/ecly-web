@@ -37,7 +37,7 @@ const Header = () => {
         <div className="flex items-center gap-4">
           <a href="#waitlist">
             <Button className="hidden lg:flex bg-ecly-green hover:bg-green-700 text-white rounded-full px-8 py-6 text-lg font-black shadow-lg hover:translate-y-0.5 transition-all border-none">
-              Quiero sumar mi comercio
+              Quiero tener Ecly en mi local
             </Button>
           </a>
           
@@ -76,7 +76,7 @@ const Header = () => {
                       <SheetClose asChild>
                         <a href="#waitlist">
                           <Button className="w-full bg-ecly-green hover:bg-green-700 text-white rounded-2xl py-8 text-xl font-black shadow-lg border-none">
-                            Sumar mi comercio
+                            Tener Ecly en mi local
                           </Button>
                         </a>
                       </SheetClose>

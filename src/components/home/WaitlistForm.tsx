@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { CheckCircle2, PartyPopper, MapPin, Store } from 'lucide-react';
+import { PartyPopper, MapPin, Store } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -25,7 +25,7 @@ const WaitlistForm = () => {
           <PartyPopper size={120} className="text-ecly-green" />
         </div>
 
-        <h2 className="text-4xl font-black tracking-tight text-slate-900 sm:text-6xl mb-6">
+        <h2 className="text-4xl font-black tracking-tight text-slate-900 sm:text-6xl mb-6 leading-tight">
           Sumá tu comercio a Ecly 🌟
         </h2>
         <p className="mt-4 text-xl font-bold text-slate-600 mb-10">
@@ -106,8 +106,8 @@ const WaitlistForm = () => {
             </select>
           </div>
 
-          <Button type="submit" className="w-full py-10 text-2xl font-black bg-ecly-green hover:bg-green-600 text-white rounded-[2rem] shadow-[0_12px_0_0_#16a34a] hover:translate-y-1 transition-all active:translate-y-2">
-            ¡Quiero sumar mi comercio! 🚀
+          <Button type="submit" className="w-full py-6 sm:py-10 text-xl sm:text-2xl font-black bg-ecly-green hover:bg-green-600 text-white rounded-[2rem] shadow-[0_12px_0_0_#16a34a] hover:translate-y-1 transition-all active:translate-y-2 whitespace-normal h-auto text-center leading-tight">
+            Quiero tener Ecly en mi local 🚀
           </Button>
           
           <p className="text-center text-sm font-bold text-slate-400">
