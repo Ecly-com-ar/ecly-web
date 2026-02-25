@@ -39,7 +39,7 @@ const BenefitsSection = () => {
     <section className="py-24 bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="text-4xl font-black text-slate-900 sm:text-5xl mb-6">
-          ¿Por qué elegir Ecly hoy? 🚀
+          ¿Por qué elegir Ecly hoy?
         </h2>
         <p className="text-xl text-slate-600 max-w-2xl mx-auto mb-16 font-medium">
           Transformá tu comercio en un punto de recarga inteligente y liderá el cambio.

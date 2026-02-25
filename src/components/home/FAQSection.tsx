@@ -32,7 +32,7 @@ const FAQSection = () => {
     <section className="py-24 bg-ecly-light">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <h2 className="text-4xl font-black text-center text-slate-900 mb-12">
-          Preguntas Frecuentes 💡
+          Preguntas Frecuentes
         </h2>
         <Accordion type="single" collapsible className="w-full space-y-4">
           {faqs.map((faq, idx) => (

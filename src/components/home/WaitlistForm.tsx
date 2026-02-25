@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { PartyPopper, MapPin, Store } from 'lucide-react';
+import { PartyPopper } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,7 @@ const WaitlistForm = () => {
         </div>
 
         <h2 className="text-4xl font-black tracking-tight text-slate-900 sm:text-6xl mb-6 leading-tight">
-          Sumá tu comercio a Ecly 🌟
+          Sumá tu comercio a Ecly
         </h2>
         <p className="mt-4 text-xl font-bold text-slate-600 mb-10">
           Completá el formulario y participá del lanzamiento en tu zona. Preinscripción gratuita y sin compromiso.
@@ -69,8 +69,8 @@ const WaitlistForm = () => {
           </div>
 
           <div className="space-y-3">
-            <Label htmlFor="business-type" className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <Store className="h-5 w-5" /> ¿Qué tipo de negocio tienes?
+            <Label htmlFor="business-type" className="text-lg font-black text-slate-900">
+              ¿Qué tipo de negocio tienes?
             </Label>
             <select 
               className="flex h-16 w-full items-center justify-between rounded-2xl border-2 border-slate-200 bg-background px-4 py-2 text-lg font-bold focus:outline-none focus:ring-0 appearance-none"
@@ -89,8 +89,8 @@ const WaitlistForm = () => {
           </div>
 
           <div className="space-y-3">
-            <Label htmlFor="zone" className="text-lg font-black text-slate-900 flex items-center gap-2">
-              <MapPin className="h-5 w-5" /> ¿En qué zona se encuentra?
+            <Label htmlFor="zone" className="text-lg font-black text-slate-900">
+              ¿En qué zona se encuentra?
             </Label>
             <select 
               className="flex h-16 w-full items-center justify-between rounded-2xl border-2 border-slate-200 bg-background px-4 py-2 text-lg font-bold focus:outline-none focus:ring-0 appearance-none"
