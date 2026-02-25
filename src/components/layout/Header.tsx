@@ -28,7 +28,7 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-[100] w-full bg-white/90 backdrop-blur-lg border-b border-slate-100 shadow-sm">
+    <header className="fixed top-0 left-0 right-0 z-[100] w-full bg-white/90 backdrop-blur-lg border-b border-slate-100 shadow-sm">
       <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center">
           <Link to="/" className="block border-none outline-none focus:ring-0">

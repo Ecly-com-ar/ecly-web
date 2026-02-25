@@ -9,7 +9,7 @@ const About = () => {
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden font-sans selection:bg-ecly-vibrant selection:text-ecly-dark">
       <Header />
-      <main className="flex-1 bg-white">
+      <main className="flex-1 bg-white pt-24">
         {/* Hero Section - About */}
         <section className="bg-ecly-light py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
