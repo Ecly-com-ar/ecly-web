@@ -126,7 +126,7 @@ const Hero = () => {
             </h1>
             
             <p className="text-lg sm:text-xl text-slate-600 font-bold mb-8 leading-snug max-w-lg">
-              Estamos lanzando Ecly en Córdoba. Buscamos comercios que quieran ofrecer recargas inteligentes y atraer nuevos clientes.
+              Estamos lanzando Ecly en Córdoba y buscamos comercios que quieran incorporar recargas inteligentes, reducir plástico y atraer más clientes a su local.
             </p>
 
             <div className="flex flex-col items-start gap-3">
