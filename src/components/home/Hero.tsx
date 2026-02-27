@@ -60,7 +60,7 @@ const Hero = () => {
     
     if (step === 'whatsapp') {
       if (formData.whatsapp.length < 8) {
-        toast.error("Número inválido");
+        toast.error("Número de WhatsApp inválido");
         return;
       }
       setStep('email');
@@ -87,7 +87,7 @@ const Hero = () => {
 
     if (step === 'businessType') {
       if (formData.businessType === "") {
-        toast.error("Selecciona tu negocio");
+        toast.error("Selecciona tu tipo de negocio");
         return;
       }
       setStep('zone');
@@ -163,9 +163,9 @@ const Hero = () => {
                 <Progress value={getProgress()} className="h-1 mb-4 bg-white/10" />
                 
                 <form onSubmit={handleSubmit} className="flex flex-row items-center gap-2">
-                  <div className="relative flex-1">
+                  <div className="relative flex-1 overflow-hidden h-12">
                     {step === 'whatsapp' && (
-                      <div className="animate-in slide-in-from-right duration-300 relative">
+                      <div key="step-whatsapp" className="animate-in slide-in-from-right-8 fade-in duration-500 relative">
                         <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
                         <Input 
                           type="tel"
@@ -178,7 +178,7 @@ const Hero = () => {
                       </div>
                     )}
                     {step === 'email' && (
-                      <div className="animate-in slide-in-from-right duration-300 relative">
+                      <div key="step-email" className="animate-in slide-in-from-right-8 fade-in duration-500 relative">
                         <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
                         <Input 
                           type="email"
@@ -192,7 +192,7 @@ const Hero = () => {
                       </div>
                     )}
                     {step === 'name' && (
-                      <div className="animate-in slide-in-from-right duration-300 relative">
+                      <div key="step-name" className="animate-in slide-in-from-right-8 fade-in duration-500 relative">
                         <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
                         <Input 
                           type="text"
@@ -206,10 +206,10 @@ const Hero = () => {
                       </div>
                     )}
                     {step === 'businessType' && (
-                      <div className="animate-in slide-in-from-right duration-300 relative">
-                        <Store className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
+                      <div key="step-business" className="animate-in slide-in-from-right-8 fade-in duration-500 relative">
+                        <Store className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60 z-10" />
                         <select 
-                          className="flex h-12 w-full items-center justify-between rounded-xl border-0 bg-white/10 pl-10 pr-4 text-white text-sm font-bold focus:outline-none focus:ring-0 appearance-none"
+                          className="flex h-12 w-full items-center justify-between rounded-xl border-0 bg-white/10 pl-10 pr-4 text-white text-sm font-bold focus:outline-none focus:ring-0 appearance-none relative"
                           value={formData.businessType}
                           onChange={(e) => setFormData({ ...formData, businessType: e.target.value })}
                           autoFocus
@@ -225,10 +225,10 @@ const Hero = () => {
                       </div>
                     )}
                     {step === 'zone' && (
-                      <div className="animate-in slide-in-from-right duration-300 relative">
-                        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
+                      <div key="step-zone" className="animate-in slide-in-from-right-8 fade-in duration-500 relative">
+                        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60 z-10" />
                         <select 
-                          className="flex h-12 w-full items-center justify-between rounded-xl border-0 bg-white/10 pl-10 pr-4 text-white text-sm font-bold focus:outline-none focus:ring-0 appearance-none"
+                          className="flex h-12 w-full items-center justify-between rounded-xl border-0 bg-white/10 pl-10 pr-4 text-white text-sm font-bold focus:outline-none focus:ring-0 appearance-none relative"
                           value={formData.zone}
                           onChange={(e) => setFormData({ ...formData, zone: e.target.value })}
                           autoFocus
