@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const benefits = [
   {
@@ -29,6 +30,7 @@ type Step = 'whatsapp' | 'email' | 'name' | 'businessType' | 'zone';
 const Hero = () => {
   const [currentBenefit, setCurrentBenefit] = useState(0);
   const [step, setStep] = useState<Step>('whatsapp');
+  const [registrationId, setRegistrationId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     whatsapp: "",
     email: "",
@@ -55,7 +57,44 @@ const Hero = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const saveProgress = async (currentStep: Step, value: string) => {
+    try {
+      if (!registrationId && currentStep === 'whatsapp') {
+        // Primer guardado: Crear registro
+        const { data, error } = await supabase
+          .from('inscriptos')
+          .insert([{ whatsapp: value }])
+          .select()
+          .single();
+        
+        if (error) throw error;
+        if (data) setRegistrationId(data.id);
+      } else if (registrationId) {
+        // Siguientes pasos: Actualizar registro existente
+        const fieldMap: Record<string, string> = {
+          email: 'email',
+          name: 'name',
+          businessType: 'business_type',
+          zone: 'zone'
+        };
+        
+        const fieldName = fieldMap[currentStep];
+        if (fieldName) {
+          const { error } = await supabase
+            .from('inscriptos')
+            .update({ [fieldName]: value })
+            .eq('id', registrationId);
+          
+          if (error) throw error;
+        }
+      }
+    } catch (err) {
+      console.error("Error guardando progreso:", err);
+      // No bloqueamos al usuario si falla el guardado en segundo plano
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (step === 'whatsapp') {
@@ -63,6 +102,7 @@ const Hero = () => {
         toast.error("Número de WhatsApp inválido");
         return;
       }
+      await saveProgress('whatsapp', formData.whatsapp);
       setStep('email');
       return;
     }
@@ -72,6 +112,7 @@ const Hero = () => {
         toast.error("Email inválido");
         return;
       }
+      await saveProgress('email', formData.email);
       setStep('name');
       return;
     }
@@ -81,6 +122,7 @@ const Hero = () => {
         toast.error("Ingresa tu nombre");
         return;
       }
+      await saveProgress('name', formData.name);
       setStep('businessType');
       return;
     }
@@ -90,6 +132,7 @@ const Hero = () => {
         toast.error("Selecciona tu tipo de negocio");
         return;
       }
+      await saveProgress('businessType', formData.businessType);
       setStep('zone');
       return;
     }
@@ -99,8 +142,10 @@ const Hero = () => {
         toast.error("Selecciona tu zona");
         return;
       }
+      await saveProgress('zone', formData.zone);
       toast.success("¡Registro completo! Pronto nos contactaremos.");
       setFormData({ whatsapp: "", email: "", name: "", businessType: "", zone: "" });
+      setRegistrationId(null);
       setStep('whatsapp');
     }
   };
