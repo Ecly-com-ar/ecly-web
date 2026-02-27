@@ -35,7 +35,7 @@ const Footer = () => {
         <p>© 2026 Ecly Inc. Todos los derechos reservados.</p>
         <div className="flex gap-6">
           <a 
-            href="https://www.linkedin.com/company/eclyautorecarga/about/?viewAsMember=true" 
+            href="https://www.linkedin.com/company/eclyautorecarga/about" 
             target="_blank" 
             rel="noopener noreferrer"
             className="cursor-pointer hover:text-white transition-colors"
@@ -43,7 +43,7 @@ const Footer = () => {
             LinkedIn
           </a>
           <a 
-            href="https://www.instagram.com/ecly.autorecarga?igsh=Y3p6ZXBnbDhpbzVh" 
+            href="https://www.instagram.com/ecly.autorecarga" 
             target="_blank" 
             rel="noopener noreferrer"
             className="cursor-pointer hover:text-white transition-colors"
