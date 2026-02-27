@@ -1,21 +1,53 @@
 "use client";
 
-import React from 'react';
-import { PartyPopper } from 'lucide-react';
+import React, { useState } from 'react';
+import { PartyPopper, Loader2 } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const WaitlistForm = () => {
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    toast({
-      title: "¡Genial! Ya estás en la lista",
-      description: "Nos pondremos en contacto muy pronto para transformar tu negocio.",
-    });
+    setIsSubmitting(true);
+    
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get('name') as string,
+      email: formData.get('email') as string,
+      whatsapp: formData.get('whatsapp') as string,
+      business_type: formData.get('business-type') as string,
+      zone: formData.get('zone') as string,
+    };
+
+    try {
+      const { error } = await supabase
+        .from('inscriptos')
+        .insert([data]);
+
+      if (error) throw error;
+
+      toast({
+        title: "¡Genial! Ya estás en la lista",
+        description: "Nos pondremos en contacto muy pronto para transformar tu negocio.",
+      });
+      
+      (e.target as HTMLFormElement).reset();
+    } catch (err) {
+      console.error("Error al registrar:", err);
+      toast({
+        title: "Error al registrar",
+        description: "Hubo un problema técnico. Por favor, intenta de nuevo.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -106,8 +138,18 @@ const WaitlistForm = () => {
             </select>
           </div>
 
-          <Button type="submit" className="w-full py-6 sm:py-10 text-xl sm:text-2xl font-black bg-ecly-green hover:bg-green-600 text-white rounded-[2rem] shadow-[0_12px_0_0_#16a34a] hover:translate-y-1 transition-all active:translate-y-2 whitespace-normal h-auto text-center leading-tight">
-            Quiero tener Ecly en mi local
+          <Button 
+            type="submit" 
+            disabled={isSubmitting}
+            className="w-full py-6 sm:py-10 text-xl sm:text-2xl font-black bg-ecly-green hover:bg-green-600 text-white rounded-[2rem] shadow-[0_12px_0_0_#16a34a] hover:translate-y-1 transition-all active:translate-y-2 whitespace-normal h-auto text-center leading-tight flex items-center justify-center gap-2"
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="animate-spin h-6 w-6" /> Registrando...
+              </>
+            ) : (
+              "Quiero tener Ecly en mi local"
+            )}
           </Button>
           
           <p className="text-center text-sm font-bold text-slate-400">
