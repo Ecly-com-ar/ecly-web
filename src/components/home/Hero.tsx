@@ -172,7 +172,7 @@ const Hero = () => {
                           placeholder="Tu WhatsApp"
                           value={formData.whatsapp}
                           onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50 font-bold pl-10 h-12 rounded-xl focus-visible:ring-0 outline-none border-0"
+                          className="bg-white/10 border-none text-white placeholder:text-white/50 font-bold pl-10 h-12 rounded-xl focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 outline-none"
                           required
                         />
                       </div>
@@ -185,7 +185,7 @@ const Hero = () => {
                           placeholder="Tu Email"
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50 font-bold pl-10 h-12 rounded-xl focus-visible:ring-0 outline-none border-0"
+                          className="bg-white/10 border-none text-white placeholder:text-white/50 font-bold pl-10 h-12 rounded-xl focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 outline-none"
                           autoFocus
                           required
                         />
@@ -199,7 +199,7 @@ const Hero = () => {
                           placeholder="Tu Nombre"
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          className="bg-white/10 border-white/20 text-white placeholder:text-white/50 font-bold pl-10 h-12 rounded-xl focus-visible:ring-0 outline-none border-0"
+                          className="bg-white/10 border-none text-white placeholder:text-white/50 font-bold pl-10 h-12 rounded-xl focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 outline-none"
                           autoFocus
                           required
                         />
@@ -209,7 +209,7 @@ const Hero = () => {
                       <div key="step-business" className="animate-in slide-in-from-right-8 fade-in duration-500 relative">
                         <Store className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60 z-10" />
                         <select 
-                          className="flex h-12 w-full items-center justify-between rounded-xl border-0 bg-white/10 pl-10 pr-4 text-white text-sm font-bold focus:outline-none focus:ring-0 appearance-none relative"
+                          className="flex h-12 w-full items-center justify-between rounded-xl border-none bg-white/10 pl-10 pr-4 text-white text-sm font-bold focus:outline-none focus:ring-0 focus:ring-offset-0 appearance-none relative"
                           value={formData.businessType}
                           onChange={(e) => setFormData({ ...formData, businessType: e.target.value })}
                           autoFocus
@@ -228,7 +228,7 @@ const Hero = () => {
                       <div key="step-zone" className="animate-in slide-in-from-right-8 fade-in duration-500 relative">
                         <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60 z-10" />
                         <select 
-                          className="flex h-12 w-full items-center justify-between rounded-xl border-0 bg-white/10 pl-10 pr-4 text-white text-sm font-bold focus:outline-none focus:ring-0 appearance-none relative"
+                          className="flex h-12 w-full items-center justify-between rounded-xl border-none bg-white/10 pl-10 pr-4 text-white text-sm font-bold focus:outline-none focus:ring-0 focus:ring-offset-0 appearance-none relative"
                           value={formData.zone}
                           onChange={(e) => setFormData({ ...formData, zone: e.target.value })}
                           autoFocus
