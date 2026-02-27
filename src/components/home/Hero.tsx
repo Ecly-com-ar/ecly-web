@@ -60,17 +60,20 @@ const Hero = () => {
   const saveProgress = async (currentStep: Step, value: string) => {
     try {
       if (!registrationId && currentStep === 'whatsapp') {
-        // Primer guardado: Crear registro
+        // PASO 1: Crear el registro inicial y obtener el ID
         const { data, error } = await supabase
           .from('inscriptos')
           .insert([{ whatsapp: value }])
-          .select()
+          .select('id')
           .single();
         
         if (error) throw error;
-        if (data) setRegistrationId(data.id);
+        if (data?.id) {
+          setRegistrationId(data.id);
+          console.log("Registro iniciado con ID:", data.id);
+        }
       } else if (registrationId) {
-        // Siguientes pasos: Actualizar registro existente
+        // PASOS SIGUIENTES: Actualizar la misma fila usando el ID
         const fieldMap: Record<string, string> = {
           email: 'email',
           name: 'name',
@@ -86,11 +89,12 @@ const Hero = () => {
             .eq('id', registrationId);
           
           if (error) throw error;
+          console.log(`Paso ${currentStep} guardado en registro ${registrationId}`);
         }
       }
     } catch (err) {
-      console.error("Error guardando progreso:", err);
-      // No bloqueamos al usuario si falla el guardado en segundo plano
+      console.error("Error en guardado progresivo:", err);
+      // No bloqueamos al usuario si el guardado falla, pero lo registramos
     }
   };
 
@@ -144,6 +148,8 @@ const Hero = () => {
       }
       await saveProgress('zone', formData.zone);
       toast.success("¡Registro completo! Pronto nos contactaremos.");
+      
+      // Resetear todo para un nuevo registro
       setFormData({ whatsapp: "", email: "", name: "", businessType: "", zone: "" });
       setRegistrationId(null);
       setStep('whatsapp');
