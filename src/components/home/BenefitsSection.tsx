@@ -6,7 +6,7 @@ import { TrendingUp, Wallet, Zap, Heart } from 'lucide-react';
 const benefits = [
   {
     title: "Aumentá tu rentabilidad",
-    description: "Reducí costos de envases y logística. Vendé por recarga y mejorá tu margen desde el primer mes.",
+    description: "Vendé por recarga y mejorá tu margen desde el primer mes.",
     icon: TrendingUp,
     color: "bg-ecly-vibrant",
     textColor: "text-ecly-dark"
