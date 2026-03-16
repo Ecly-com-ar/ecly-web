@@ -14,7 +14,7 @@ const ProblemSection = () => {
               <img 
                 alt="Problemática de envases plásticos" 
                 className="w-full h-full object-cover" 
-                src="https://grupoakua.es/wp-content/uploads/2021/08/pexels-mali-maeder-802221-1.jpg" 
+                src="/image_envases.jpeg" 
               />
             </div>
           </div>
