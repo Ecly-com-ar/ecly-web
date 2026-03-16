@@ -8,13 +8,15 @@ const ProblemSection = () => {
     <section id="problema" className="py-24 bg-white overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
-          <div className="relative order-2 lg:order-1">
+          <div className="relative order-2 lg:order-1 flex justify-center">
             <div className="absolute -left-12 -top-12 h-64 w-64 rounded-full bg-ecly-light blur-3xl opacity-50"></div>
-            <img 
-              alt="Problemática de envases plásticos" 
-              className="relative z-10 w-full h-auto rounded-3xl shadow-2xl transition-transform hover:scale-[1.02] duration-500" 
-              src="https://grupoakua.es/wp-content/uploads/2021/08/pexels-mali-maeder-802221-1.jpg" 
-            />
+            <div className="relative z-10 w-full max-w-[500px] aspect-square overflow-hidden rounded-[3rem] shadow-2xl transition-transform hover:scale-[1.02] duration-500 border-4 border-white">
+              <img 
+                alt="Problemática de envases plásticos" 
+                className="w-full h-full object-cover" 
+                src="https://grupoakua.es/wp-content/uploads/2021/08/pexels-mali-maeder-802221-1.jpg" 
+              />
+            </div>
           </div>
           
           <div className="mt-12 lg:mt-0 order-1 lg:order-2">
