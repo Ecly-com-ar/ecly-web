@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Menu } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Sheet,
   SheetContent,
@@ -12,20 +12,6 @@ import {
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const handleNavigation = (path: string, isHash: boolean = false) => {
-    setIsOpen(false);
-    
-    if (isHash && location.pathname === '/') {
-      return;
-    }
-    
-    if (!isHash) {
-      navigate(path);
-    }
-  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-[100] w-full bg-white/90 backdrop-blur-lg border-b border-slate-100 shadow-sm">
@@ -43,13 +29,12 @@ const Header = () => {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-10">
           <Link className="text-base font-black text-slate-600 hover:text-ecly-green transition-colors" to="/">Inicio</Link>
-          <a className="text-base font-black text-slate-600 hover:text-ecly-green transition-colors" href="/#problema">El Problema</a>
-          <a className="text-base font-black text-slate-600 hover:text-ecly-green transition-colors" href="/#waitlist">Inscripción</a>
           <Link className="text-base font-black text-slate-600 hover:text-ecly-green transition-colors" to="/quienes-somos">Quiénes Somos</Link>
+          <Link className="text-base font-black text-slate-600 hover:text-ecly-green transition-colors" to="/blog">Blog</Link>
         </nav>
 
         <div className="flex items-center gap-4">
-          <a href="#waitlist" className="hidden lg:block">
+          <a href="/#waitlist" className="hidden lg:block">
             <Button className="bg-ecly-green hover:bg-green-700 text-white rounded-full px-8 py-6 text-lg font-black shadow-lg hover:translate-y-0.5 transition-all border-none">
               Quiero tener Ecly en mi local
             </Button>
@@ -84,20 +69,6 @@ const Header = () => {
                     >
                       Inicio
                     </Link>
-                    <a 
-                      className="text-2xl font-black text-slate-900 hover:text-ecly-green transition-colors" 
-                      href="/#problema"
-                      onClick={() => handleNavigation('/#problema', true)}
-                    >
-                      El Problema
-                    </a>
-                    <a 
-                      className="text-2xl font-black text-slate-900 hover:text-ecly-green transition-colors" 
-                      href="/#waitlist"
-                      onClick={() => handleNavigation('/#waitlist', true)}
-                    >
-                      Inscripción
-                    </a>
                     <Link 
                       className="text-2xl font-black text-slate-900 hover:text-ecly-green transition-colors" 
                       to="/quienes-somos"
@@ -105,9 +76,16 @@ const Header = () => {
                     >
                       Quiénes Somos
                     </Link>
+                    <Link 
+                      className="text-2xl font-black text-slate-900 hover:text-ecly-green transition-colors" 
+                      to="/blog"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Blog
+                    </Link>
                     
                     <div className="mt-8">
-                      <a href="#waitlist" onClick={() => setIsOpen(false)}>
+                      <a href="/#waitlist" onClick={() => setIsOpen(false)}>
                         <Button className="w-full bg-ecly-green hover:bg-green-700 text-white rounded-2xl py-8 text-xl font-black shadow-lg border-none">
                           Tener Ecly en mi local
                         </Button>
