@@ -10,25 +10,18 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { LogOut, Loader2, Plus, FileText, Trash2, UserCircle, Send, Edit3, X, Eye, Layout } from 'lucide-react';
+import { LogOut, Loader2, Plus, FileText, Trash2, Send, Edit3, X, Eye, Bold, Italic, List, ListOrdered, Heading1, Link as LinkIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const Dashboard = () => {
-  const { user, profile, loading, signOut, refreshProfile } = useAuth();
+  const { user, profile, loading, signOut } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [myPosts, setMyPosts] = useState<any[]>([]);
-  const [showOnboarding, setShowOnboarding] = useState(false);
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState(false);
   
-  const [onboardingData, setOnboardingData] = useState({
-    first_name: '',
-    last_name: '',
-    bio: '',
-    avatar_url: ''
-  });
-
   const [postData, setPostData] = useState({
     title: '',
     excerpt: '',
@@ -38,25 +31,10 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-    if (!loading && profile) {
-      const needsOnboarding = !profile.first_name || !profile.last_name || !profile.bio;
-      if (needsOnboarding) {
-        setShowOnboarding(true);
-        setOnboardingData({
-          first_name: profile.first_name || '',
-          last_name: profile.last_name || '',
-          bio: profile.bio || '',
-          avatar_url: profile.avatar_url || ''
-        });
-      } else {
-        setShowOnboarding(false);
-      }
-    }
-    
     if (user && !loading) {
       fetchMyPosts();
     }
-  }, [loading, profile, user]);
+  }, [loading, user]);
 
   const fetchMyPosts = async () => {
     const { data } = await supabase
@@ -65,6 +43,28 @@ const Dashboard = () => {
       .eq('author_id', user?.id)
       .order('created_at', { ascending: false });
     if (data) setMyPosts(data);
+  };
+
+  const insertTag = (tag: string, endTag: string = '') => {
+    const textarea = document.getElementById('content-editor') as HTMLTextAreaElement;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    const selection = text.substring(start, end);
+    
+    const before = text.substring(0, start);
+    const after = text.substring(end);
+    
+    const newContent = before + tag + selection + (endTag || tag) + after;
+    setPostData({ ...postData, content: newContent });
+    
+    // Devolver foco y posición
+    setTimeout(() => {
+      textarea.focus();
+      textarea.setSelectionRange(start + tag.length, end + tag.length);
+    }, 0);
   };
 
   const startEditing = (post: any) => {
@@ -151,7 +151,6 @@ const Dashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Formulario Principal */}
           <div className="lg:col-span-8">
             <div className={`bg-white p-6 sm:p-10 rounded-[3.5rem] shadow-sm border-2 ${editingPostId ? 'border-ecly-electric' : 'border-slate-100'}`}>
               <div className="flex justify-between items-center mb-8">
@@ -168,69 +167,64 @@ const Dashboard = () => {
               
               <form onSubmit={handlePostSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <Label className="font-black text-xs uppercase text-slate-400 ml-2">Título de la Publicación</Label>
+                  <Label className="font-black text-xs uppercase text-slate-400 ml-2">Título</Label>
                   <Input value={postData.title} onChange={e => setPostData({...postData, title: e.target.value})} required className="font-black py-8 text-xl rounded-2xl border-2"/>
                 </div>
-                <div className="space-y-2">
-                  <Label className="font-black text-xs uppercase text-slate-400 ml-2">Bajada / Resumen</Label>
-                  <Textarea value={postData.excerpt} onChange={e => setPostData({...postData, excerpt: e.target.value})} required className="font-bold h-24 rounded-2xl border-2"/>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label className="font-black text-xs uppercase text-slate-400 ml-2">Categoría</Label>
-                    <select className="flex h-16 w-full items-center justify-between rounded-2xl border-2 border-slate-200 bg-background px-4 py-2 font-bold appearance-none" value={postData.category} onChange={e => setPostData({...postData, category: e.target.value})}>
-                      <option>Sustentabilidad</option>
-                      <option>Comunidad</option>
-                      <option>Empresa</option>
-                    </select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="font-black text-xs uppercase text-slate-400 ml-2">URL Imagen Destacada</Label>
-                    <Input value={postData.image_url} onChange={e => setPostData({...postData, image_url: e.target.value})} required className="font-bold h-16 rounded-2xl border-2"/>
-                  </div>
-                </div>
-
-                {/* Editor con Preview */}
+                
                 <div className="space-y-2">
                   <div className="flex items-center justify-between ml-2">
-                    <Label className="font-black text-xs uppercase text-slate-400">Contenido del Artículo</Label>
+                    <Label className="font-black text-xs uppercase text-slate-400">Contenido</Label>
                     <div className="flex bg-slate-100 p-1 rounded-xl">
-                      <button 
-                        type="button"
-                        onClick={() => setPreviewMode(false)}
-                        className={`px-4 py-1.5 text-xs font-black rounded-lg transition-all ${!previewMode ? 'bg-white shadow-sm text-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
-                      >
-                        Editor
-                      </button>
-                      <button 
-                        type="button"
-                        onClick={() => setPreviewMode(true)}
-                        className={`px-4 py-1.5 text-xs font-black rounded-lg transition-all ${previewMode ? 'bg-white shadow-sm text-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
-                      >
-                        Vista Previa
-                      </button>
+                      <button type="button" onClick={() => setPreviewMode(false)} className={`px-4 py-1.5 text-xs font-black rounded-lg transition-all ${!previewMode ? 'bg-white shadow-sm text-slate-900' : 'text-slate-400'}`}>Editor</button>
+                      <button type="button" onClick={() => setPreviewMode(true)} className={`px-4 py-1.5 text-xs font-black rounded-lg transition-all ${previewMode ? 'bg-white shadow-sm text-slate-900' : 'text-slate-400'}`}>Vista Previa</button>
                     </div>
                   </div>
                   
+                  {!previewMode && (
+                    <div className="flex flex-wrap gap-2 p-3 bg-slate-50 border-x-2 border-t-2 border-slate-200 rounded-t-2xl">
+                      <Button type="button" variant="ghost" size="icon" onClick={() => insertTag('**')} className="h-10 w-10 text-slate-600"><Bold size={18}/></Button>
+                      <Button type="button" variant="ghost" size="icon" onClick={() => insertTag('_')} className="h-10 w-10 text-slate-600"><Italic size={18}/></Button>
+                      <Button type="button" variant="ghost" size="icon" onClick={() => insertTag('## ')} className="h-10 w-10 text-slate-600"><Heading1 size={18}/></Button>
+                      <Button type="button" variant="ghost" size="icon" onClick={() => insertTag('- ')} className="h-10 w-10 text-slate-600"><List size={18}/></Button>
+                      <Button type="button" variant="ghost" size="icon" onClick={() => insertTag('1. ')} className="h-10 w-10 text-slate-600"><ListOrdered size={18}/></Button>
+                      <Button type="button" variant="ghost" size="icon" onClick={() => insertTag('[texto](', ')') } className="h-10 w-10 text-slate-600"><LinkIcon size={18}/></Button>
+                    </div>
+                  )}
+
                   {previewMode ? (
-                    <div className="min-h-[400px] rounded-2xl border-2 border-slate-100 bg-slate-50 p-8 prose prose-slate max-w-none overflow-y-auto">
-                      {postData.content ? (
-                        <div className="markdown-content">
-                          <ReactMarkdown>{postData.content}</ReactMarkdown>
-                        </div>
-                      ) : (
-                        <p className="text-slate-300 font-bold italic text-center pt-20">Nada que previsualizar todavía...</p>
-                      )}
+                    <div className="min-h-[400px] rounded-2xl border-2 border-slate-200 bg-white p-8 prose prose-slate prose-green max-w-none overflow-y-auto">
+                      {postData.content ? <ReactMarkdown remarkPlugins={[remarkGfm]}>{postData.content}</ReactMarkdown> : <p className="text-slate-300 italic text-center pt-20">No hay contenido...</p>}
                     </div>
                   ) : (
                     <Textarea 
+                      id="content-editor"
                       value={postData.content} 
                       onChange={e => setPostData({...postData, content: e.target.value})} 
-                      placeholder="Usa Markdown para dar formato (## Títulos, **Negritas**, etc.)"
                       required 
-                      className="font-bold h-[400px] rounded-2xl border-2 bg-slate-50 p-6 focus:bg-white transition-colors"
+                      className="font-bold h-[400px] rounded-b-2xl rounded-t-none border-2 border-slate-200 bg-slate-50 p-6 focus:bg-white transition-colors resize-none"
                     />
                   )}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label className="font-black text-xs uppercase text-slate-400 ml-2">Resumen</Label>
+                    <Textarea value={postData.excerpt} onChange={e => setPostData({...postData, excerpt: e.target.value})} required className="font-bold h-24 rounded-2xl border-2"/>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label className="font-black text-xs uppercase text-slate-400 ml-2">Categoría</Label>
+                      <select className="flex h-14 w-full items-center justify-between rounded-xl border-2 border-slate-200 bg-background px-4 font-bold appearance-none" value={postData.category} onChange={e => setPostData({...postData, category: e.target.value})}>
+                        <option>Sustentabilidad</option>
+                        <option>Comunidad</option>
+                        <option>Empresa</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="font-black text-xs uppercase text-slate-400 ml-2">Imagen URL</Label>
+                      <Input value={postData.image_url} onChange={e => setPostData({...postData, image_url: e.target.value})} required className="font-bold h-14 rounded-xl border-2"/>
+                    </div>
+                  </div>
                 </div>
 
                 <Button 
@@ -244,11 +238,10 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Listado Lateral */}
           <div className="lg:col-span-4 space-y-8">
-            <h2 className="text-3xl font-black flex items-center gap-4 text-slate-900"><FileText className="text-ecly-green h-8 w-8"/> Tus Publicaciones</h2>
+            <h2 className="text-3xl font-black flex items-center gap-4 text-slate-900"><FileText className="text-ecly-green h-8 w-8"/> Historial</h2>
             <div className="space-y-4 max-h-[80vh] overflow-y-auto pr-2 custom-scrollbar">
-              {myPosts.length > 0 ? myPosts.map(post => (
+              {myPosts.map(post => (
                 <div key={post.id} className={`bg-white p-5 rounded-[2.5rem] border transition-all ${editingPostId === post.id ? 'border-ecly-electric bg-blue-50/30' : 'border-slate-100 shadow-sm hover:border-ecly-green'}`}>
                   <h3 className="font-black text-slate-800 line-clamp-2 mb-2">{post.title}</h3>
                   <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-50">
@@ -262,7 +255,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                 </div>
-              )) : <p className="text-slate-400 font-bold italic text-center py-8">Aún no has escrito nada.</p>}
+              ))}
             </div>
           </div>
         </div>

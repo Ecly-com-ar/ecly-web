@@ -29,9 +29,9 @@ export default {
           light: "#f0fdf4",
           dark: "#14532d",
           vibrant: "#4ade80",
-          accent: "#fbbf24", // Amarillo vibrante
-          electric: "#3b82f6", // Azul eléctrico
-          pop: "#f43f5e", // Rosa/Rojo para destacar
+          accent: "#fbbf24",
+          electric: "#3b82f6",
+          pop: "#f43f5e",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -88,5 +88,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 } satisfies Config;
