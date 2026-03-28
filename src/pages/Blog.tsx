@@ -25,9 +25,6 @@ const Blog = () => {
           
           {/* Encabezado del Blog */}
           <div className="mb-16 text-center lg:text-left">
-            <Badge className="bg-ecly-light text-ecly-green hover:bg-ecly-light border-none px-4 py-1 rounded-full font-black uppercase tracking-widest mb-4">
-              Magazine
-            </Badge>
             <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tight leading-none mb-6">
               Historias de <span className="text-ecly-green">Cambio</span>
             </h1>
