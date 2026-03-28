@@ -28,6 +28,8 @@ const EditProfileDialog = () => {
     avatar_url: profile?.avatar_url || ''
   });
 
+  const MAX_BIO_LENGTH = 256;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
@@ -39,7 +41,7 @@ const EditProfileDialog = () => {
         .update({
           first_name: formData.first_name,
           last_name: formData.last_name,
-          bio: formData.bio,
+          bio: formData.bio.substring(0, MAX_BIO_LENGTH),
           avatar_url: formData.avatar_url,
           updated_at: new Date().toISOString()
         })
@@ -94,10 +96,16 @@ const EditProfileDialog = () => {
           </div>
           
           <div className="space-y-2">
-            <Label className="font-black text-[10px] uppercase text-slate-400 ml-1">Bio</Label>
+            <div className="flex justify-between items-center ml-1">
+              <Label className="font-black text-[10px] uppercase text-slate-400">Bio</Label>
+              <span className={`text-[10px] font-black ${formData.bio.length >= MAX_BIO_LENGTH ? 'text-ecly-pop' : 'text-slate-400'}`}>
+                {formData.bio.length}/{MAX_BIO_LENGTH}
+              </span>
+            </div>
             <Textarea 
               value={formData.bio} 
               onChange={e => setFormData({...formData, bio: e.target.value})}
+              maxLength={MAX_BIO_LENGTH}
               placeholder="Cuéntanos un poco sobre ti..."
               className="rounded-xl border-2 font-bold min-h-[100px] resize-none"
             />
