@@ -30,7 +30,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = async (userId: string) => {
-    console.log("[AuthProvider] 🔄 Obteniendo perfil para ID:", userId);
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -38,71 +37,40 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         .eq('id', userId)
         .maybeSingle();
       
-      if (error) {
-        console.error("[AuthProvider] ❌ Error Supabase fetchProfile:", error);
-      }
-
-      if (data) {
-        console.log("[AuthProvider] ✅ Perfil cargado:", data);
-        setProfile(data);
-      } else {
-        console.warn("[AuthProvider] ⚠️ No se encontró perfil, inicializando vacío.");
-        setProfile({ role: 'editor', first_name: '', last_name: '', bio: '', avatar_url: '' });
-      }
+      if (error) throw error;
+      setProfile(data || { role: 'editor', first_name: '', last_name: '', bio: '', avatar_url: '' });
     } catch (err) {
-      console.error("[AuthProvider] 💥 Excepción en fetchProfile:", err);
+      console.error("[AuthProvider] Error cargando perfil:", err);
     } finally {
       setLoading(false);
-      console.log("[AuthProvider] 🏁 Carga finalizada (loading=false)");
     }
   };
 
   useEffect(() => {
-    console.log("[AuthProvider] 🔌 Inicializando Auth...");
-
-    // 1. Verificación inicial explícita
-    const initAuth = async () => {
-      try {
-        const { data: { session: initialSession } } = await supabase.auth.getSession();
-        console.log("[AuthProvider] 🔍 Sesión inicial detectada:", initialSession?.user?.id || "Ninguna");
-        
-        setSession(initialSession);
-        setUser(initialSession?.user ?? null);
-
-        if (initialSession?.user) {
-          await fetchProfile(initialSession.user.id);
-        } else {
-          setLoading(false);
-        }
-      } catch (err) {
-        console.error("[AuthProvider] 💥 Error en initAuth:", err);
+    // 1. Obtener sesión inicial
+    supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
+      setSession(initialSession);
+      setUser(initialSession?.user ?? null);
+      if (initialSession?.user) {
+        fetchProfile(initialSession.user.id);
+      } else {
         setLoading(false);
       }
-    };
+    });
 
-    initAuth();
-
-    // 2. Suscripción a cambios
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
-      console.log("[AuthProvider] 🔑 Evento Auth detectado:", event);
-      
+    // 2. Escuchar cambios
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, currentSession) => {
       setSession(currentSession);
       setUser(currentSession?.user ?? null);
-
       if (currentSession?.user) {
-        // Solo recargamos perfil si el evento lo sugiere (ej: Sign In)
-        if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
-          await fetchProfile(currentSession.user.id);
-        }
+        fetchProfile(currentSession.user.id);
       } else {
         setProfile(null);
         setLoading(false);
       }
     });
 
-    return () => {
-      subscription.unsubscribe();
-    };
+    return () => subscription.unsubscribe();
   }, []);
 
   const signOut = async () => {
@@ -111,10 +79,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const refreshProfile = async () => {
-    if (user) {
-      // No ponemos loading=true aquí para no bloquear la UI durante el refresco
-      await fetchProfile(user.id);
-    }
+    if (user) await fetchProfile(user.id);
   };
 
   return (
