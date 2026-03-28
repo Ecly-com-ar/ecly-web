@@ -32,7 +32,6 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-    // Protección de ruta: Si no hay usuario y ya terminó de cargar, mandamos a login
     if (!loading && !user) {
       navigate('/access', { replace: true });
     }
@@ -197,7 +196,7 @@ const Dashboard = () => {
                   )}
 
                   {previewMode ? (
-                    <div className="min-h-[400px] rounded-2xl border-2 border-slate-200 bg-white p-8 prose prose-slate prose-green max-w-none overflow-y-auto">
+                    <div className="min-h-[400px] rounded-2xl border-2 border-slate-200 bg-white p-8 prose prose-slate prose-green max-w-none overflow-y-auto prose-p:my-3 prose-headings:mt-6 prose-headings:mb-2">
                       {postData.content ? <ReactMarkdown remarkPlugins={[remarkGfm]}>{postData.content}</ReactMarkdown> : <p className="text-slate-300 italic text-center pt-20">No hay contenido...</p>}
                     </div>
                   ) : (

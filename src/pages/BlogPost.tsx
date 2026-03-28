@@ -18,10 +18,7 @@ const BlogPost = () => {
     const fetchData = async () => {
       if (!postID) return;
       
-      console.log("[BlogPost] 🔍 Buscando artículo con identificador:", postID);
-      
       try {
-        // Verificamos si postID tiene formato de UUID para evitar errores de tipo en Postgres
         const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(postID);
         
         let query = supabase
@@ -29,28 +26,19 @@ const BlogPost = () => {
           .select('*, author:profiles(*)');
 
         if (isUUID) {
-          // Si parece un UUID, buscamos por ID o Slug
           query = query.or(`id.eq.${postID},slug.eq.${postID}`);
         } else {
-          // Si es texto (slug), solo buscamos por slug para evitar error de casteo
           query = query.eq('slug', postID);
         }
 
         const { data: postData, error } = await query.maybeSingle();
 
-        if (error) {
-          console.error("[BlogPost] ❌ Error en la consulta:", error);
-        }
-
         if (postData) {
-          console.log("[BlogPost] ✅ Artículo encontrado:", postData.title);
           setPost(postData);
           setAuthor(postData.author);
-        } else {
-          console.warn("[BlogPost] ⚠️ No se encontró ningún artículo coincidente.");
         }
       } catch (err) {
-        console.error("[BlogPost] 💥 Error inesperado:", err);
+        console.error("[BlogPost] Error:", err);
       } finally {
         setLoading(false);
       }
@@ -112,11 +100,12 @@ const BlogPost = () => {
             <img src={post.image_url} alt={post.title} className="w-full h-full object-cover"/>
           </div>
 
-          <div className="prose prose-lg prose-slate max-w-none mb-16">
+          {/* Contenedor Compacto de Markdown */}
+          <div className="prose prose-slate max-w-none mb-16 prose-p:my-3 prose-headings:mt-8 prose-headings:mb-4 prose-p:leading-relaxed prose-headings:leading-tight">
             <p className="text-xl font-bold text-ecly-green/80 italic mb-10 border-l-4 border-ecly-green pl-6 leading-relaxed">
               {post.excerpt}
             </p>
-            <div className="markdown-content font-medium leading-relaxed text-slate-700 whitespace-pre-wrap">
+            <div className="markdown-content font-medium text-slate-700">
               <ReactMarkdown>{post.content}</ReactMarkdown>
             </div>
           </div>
