@@ -10,10 +10,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { LogOut, Loader2, Plus, FileText, Trash2, Send, Edit3, X, Eye, Bold, Italic, List, ListOrdered, Heading1, Link as LinkIcon } from 'lucide-react';
+import { LogOut, Loader2, Plus, FileText, Trash2, Edit3, X, Eye, Bold, Italic, List, ListOrdered, Heading1, Link as LinkIcon } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import EditProfileDialog from '@/components/dashboard/EditProfileDialog';
 
 const Dashboard = () => {
   const { user, profile, loading, signOut } = useAuth();
@@ -147,9 +148,13 @@ const Dashboard = () => {
       <Header />
       <main className="flex-1 pt-32 pb-24 px-4 max-w-7xl mx-auto w-full">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
-          <div>
-            <h1 className="text-5xl font-black text-slate-900 tracking-tight">Panel Editor</h1>
-            <p className="font-bold text-ecly-green text-lg">Sesión de {profile?.first_name || 'Autor'}</p>
+          <div className="space-y-2">
+            <h1 className="text-5xl font-black text-slate-900 tracking-tight leading-none">Panel Editor</h1>
+            <div className="flex items-center gap-4">
+              <p className="font-bold text-ecly-green text-lg">Sesión de {profile?.first_name || 'Autor'}</p>
+              <div className="h-4 w-[2px] bg-slate-200 hidden sm:block"></div>
+              <EditProfileDialog />
+            </div>
           </div>
           <Button variant="outline" onClick={() => signOut()} className="text-slate-500 font-black border-2 rounded-full px-8 py-6 hover:bg-ecly-pop hover:text-white transition-all"><LogOut className="mr-2 h-4 w-4"/> Salir</Button>
         </div>
