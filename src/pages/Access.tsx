@@ -35,11 +35,13 @@ const Access = () => {
         <div className="w-full max-w-md bg-white rounded-[3rem] shadow-2xl p-8 sm:p-12 border-4 border-white transition-all duration-500">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-black text-slate-900 mb-2">Acceso Editor</h1>
-            <p className="text-slate-500 font-bold">Gestioná el contenido de Ecly</p>
+            <p className="text-slate-500 font-bold">Uso exclusivo para personal de Ecly</p>
           </div>
           
           <Auth
             supabaseClient={supabase}
+            view="sign_in"
+            showLinks={false}
             appearance={{ 
               theme: ThemeSupa,
               variables: {
@@ -57,20 +59,18 @@ const Access = () => {
                 sign_in: {
                   email_label: 'Correo electrónico',
                   password_label: 'Contraseña',
-                  button_label: 'Entrar',
-                  email_input_placeholder: 'tu@email.com',
-                  password_input_placeholder: 'Tu contraseña',
-                },
-                sign_up: {
-                  email_label: 'Correo electrónico',
-                  password_label: 'Contraseña',
-                  button_label: 'Registrarse',
-                  email_input_placeholder: 'tu@email.com',
-                  password_input_placeholder: 'Tu contraseña',
+                  button_label: 'Entrar al Panel',
+                  email_input_placeholder: 'tu@ecly.com',
+                  password_input_placeholder: 'Tu contraseña secreta',
                 }
               }
             }}
           />
+          <div className="mt-6 text-center">
+            <p className="text-xs text-slate-400 font-bold italic">
+              * Si no tienes credenciales, contacta al administrador del sistema.
+            </p>
+          </div>
         </div>
       </main>
       <Footer />
