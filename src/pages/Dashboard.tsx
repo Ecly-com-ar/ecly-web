@@ -35,8 +35,15 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
+    console.log("[Dashboard] Estado de carga:", loading);
+    console.log("[Dashboard] Perfil actual:", profile);
+    console.log("[Dashboard] Usuario actual:", user?.id);
+
     if (!loading && profile) {
-      if (!profile.first_name || !profile.last_name || !profile.bio) {
+      const needsOnboarding = !profile.first_name || !profile.last_name || !profile.bio;
+      console.log("[Dashboard] ¿Necesita onboarding?:", needsOnboarding);
+      
+      if (needsOnboarding) {
         setShowOnboarding(true);
         setOnboardingData({
           first_name: profile.first_name || '',
@@ -46,68 +53,121 @@ const Dashboard = () => {
         });
       }
     }
-    if (user) fetchMyPosts();
+    
+    if (user) {
+      console.log("[Dashboard] Cargando posts del usuario...");
+      fetchMyPosts();
+    }
   }, [loading, profile, user]);
 
   const fetchMyPosts = async () => {
-    const { data } = await supabase
-      .from('blog_posts')
-      .select('*')
-      .eq('author_id', user?.id)
-      .order('created_at', { ascending: false });
-    if (data) setMyPosts(data);
+    try {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('author_id', user?.id)
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        console.error("[Dashboard] Error al traer posts:", error);
+      } else if (data) {
+        console.log("[Dashboard] Posts cargados:", data.length);
+        setMyPosts(data);
+      }
+    } catch (err) {
+      console.error("[Dashboard] Excepción en fetchMyPosts:", err);
+    }
   };
 
   const handleOnboardingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("[Dashboard] Iniciando sumisión de onboarding...", onboardingData);
+    
     if (onboardingData.bio.length > 256) {
       toast.error("La biografía no puede superar los 256 caracteres.");
       return;
     }
+
     setIsSubmitting(true);
-    const { error } = await supabase.from('profiles').update(onboardingData).eq('id', user?.id);
-    if (!error) {
-      toast.success("Perfil actualizado correctamente");
-      await refreshProfile();
-      setShowOnboarding(false);
-    } else {
-      toast.error("Error al actualizar el perfil");
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update(onboardingData)
+        .eq('id', user?.id);
+
+      if (error) {
+        console.error("[Dashboard] Error al actualizar perfil en DB:", error);
+        toast.error("Error al actualizar el perfil: " + error.message);
+      } else {
+        console.log("[Dashboard] Perfil actualizado exitosamente. Refrescando...");
+        toast.success("Perfil actualizado correctamente");
+        await refreshProfile();
+        setShowOnboarding(false);
+      }
+    } catch (err) {
+      console.error("[Dashboard] Excepción en onboarding:", err);
+      toast.error("Ocurrió un error inesperado.");
+    } finally {
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   };
 
   const handlePostSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("[Dashboard] Publicando noticia...");
     setIsSubmitting(true);
     const slug = postData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
-    const { error } = await supabase
-      .from('blog_posts')
-      .insert([{ ...postData, slug, author_id: user?.id, published: true }]);
+    try {
+      const { error } = await supabase
+        .from('blog_posts')
+        .insert([{ ...postData, slug, author_id: user?.id, published: true }]);
 
-    if (error) {
-      toast.error("Error al publicar la noticia");
-    } else {
-      toast.success("¡Noticia publicada con éxito!");
-      setPostData({ title: '', excerpt: '', content: '', category: 'Sustentabilidad', image_url: '' });
-      fetchMyPosts();
+      if (error) {
+        console.error("[Dashboard] Error al insertar post:", error);
+        toast.error("Error al publicar la noticia");
+      } else {
+        console.log("[Dashboard] Post publicado.");
+        toast.success("¡Noticia publicada con éxito!");
+        setPostData({ title: '', excerpt: '', content: '', category: 'Sustentabilidad', image_url: '' });
+        fetchMyPosts();
+      }
+    } catch (err) {
+      console.error("[Dashboard] Excepción en handlePostSubmit:", err);
+    } finally {
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   };
 
   const deletePost = async (id: string) => {
     if (!confirm("¿Deseas eliminar permanentemente esta noticia?")) return;
+    console.log("[Dashboard] Eliminando post:", id);
     const { error } = await supabase.from('blog_posts').delete().eq('id', id);
     if (!error) {
       toast.success("Noticia eliminada");
       fetchMyPosts();
+    } else {
+      console.error("[Dashboard] Error al borrar post:", error);
     }
   };
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="animate-spin h-10 w-10 text-ecly-green" /></div>;
-  if (!user) return <div className="p-20 text-center font-black">Debes iniciar sesión para acceder.</div>;
+  if (loading) {
+    console.log("[Dashboard] Renderizando estado de carga inicial...");
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
+        <Loader2 className="animate-spin h-10 w-10 text-ecly-green mb-4" />
+        <p className="font-bold text-slate-400">Cargando tu panel de editor...</p>
+      </div>
+    );
+  }
+
+  if (!user) {
+    console.warn("[Dashboard] Usuario no autenticado, bloqueando acceso.");
+    return <div className="p-20 text-center font-black">Debes iniciar sesión para acceder.</div>;
+  }
 
   if (showOnboarding) {
+    console.log("[Dashboard] Renderizando formulario de onboarding.");
     return (
       <div className="min-h-screen bg-ecly-light flex items-center justify-center p-4">
         <form onSubmit={handleOnboardingSubmit} className="bg-white p-8 sm:p-12 rounded-[3rem] shadow-2xl max-w-xl w-full space-y-8 border-4 border-white">
@@ -157,6 +217,7 @@ const Dashboard = () => {
     );
   }
 
+  console.log("[Dashboard] Renderizando panel principal.");
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
       <Header />

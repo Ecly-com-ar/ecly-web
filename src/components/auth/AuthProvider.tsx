@@ -30,56 +30,78 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = async (userId: string) => {
+    console.log("[AuthProvider] Iniciando fetchProfile para:", userId);
     try {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('profiles')
         .select('role, first_name, last_name, bio, avatar_url')
         .eq('id', userId)
         .maybeSingle();
       
+      if (error) {
+        console.error("[AuthProvider] Error de Supabase al obtener perfil:", error);
+        throw error;
+      }
+
       if (data) {
+        console.log("[AuthProvider] Perfil cargado exitosamente:", data);
         setProfile(data);
       } else {
+        console.warn("[AuthProvider] No se encontró perfil en la DB, inicializando estado básico.");
         setProfile({ role: 'editor', first_name: '', last_name: '', bio: '', avatar_url: '' });
       }
     } catch (err) {
-      console.error("[Auth] Error fetching profile:", err);
+      console.error("[AuthProvider] Excepción atrapada en fetchProfile:", err);
+      // Evitamos el bloqueo seteando un perfil vacío si falla
+      setProfile({ role: 'editor', first_name: '', last_name: '', bio: '', avatar_url: '' });
     } finally {
+      console.log("[AuthProvider] Finalizando carga de perfil.");
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id);
+    console.log("[AuthProvider] Iniciando AuthProvider useEffect...");
+    
+    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      console.log("[AuthProvider] Sesión inicial obtenida:", currentSession?.user?.email || "Sin sesión");
+      setSession(currentSession);
+      setUser(currentSession?.user ?? null);
+      if (currentSession?.user) {
+        fetchProfile(currentSession.user.id);
       } else {
+        console.log("[AuthProvider] No hay usuario inicial, deteniendo carga.");
         setLoading(false);
       }
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
+      console.log("[AuthProvider] Evento de Auth cambiado:", event);
       setSession(currentSession);
       setUser(currentSession?.user ?? null);
       if (currentSession?.user) {
         await fetchProfile(currentSession.user.id);
       } else {
+        console.log("[AuthProvider] Usuario deslogueado o sin sesión.");
         setProfile(null);
         setLoading(false);
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      console.log("[AuthProvider] Desmontando AuthProvider.");
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signOut = async () => {
+    console.log("[AuthProvider] Iniciando SignOut...");
     setLoading(true);
     await supabase.auth.signOut();
   };
 
   const refreshProfile = async () => {
+    console.log("[AuthProvider] Refrescando perfil manualmente...");
     if (user) await fetchProfile(user.id);
   };
 
