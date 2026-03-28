@@ -10,13 +10,15 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { LogOut, Loader2, Plus, FileText, Trash2, UserCircle, Send } from 'lucide-react';
+import { LogOut, Loader2, Plus, FileText, Trash2, UserCircle, Send, Edit3, X, Eye } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
   const { user, profile, loading, signOut, refreshProfile } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [myPosts, setMyPosts] = useState<any[]>([]);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [editingPostId, setEditingPostId] = useState<string | null>(null);
   
   const [onboardingData, setOnboardingData] = useState({
     first_name: '',
@@ -63,60 +65,55 @@ const Dashboard = () => {
     if (data) setMyPosts(data);
   };
 
-  const handleOnboardingSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          first_name: onboardingData.first_name,
-          last_name: onboardingData.last_name,
-          bio: onboardingData.bio,
-          avatar_url: onboardingData.avatar_url,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', user?.id);
+  const startEditing = (post: any) => {
+    setEditingPostId(post.id);
+    setPostData({
+      title: post.title,
+      excerpt: post.excerpt,
+      content: post.content,
+      category: post.category,
+      image_url: post.image_url
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
-      if (error) throw error;
-
-      toast.success("Perfil actualizado");
-      await refreshProfile();
-      setShowOnboarding(false);
-    } catch (err: any) {
-      console.error("[Dashboard] Error al actualizar perfil:", err);
-      toast.error("No se pudo guardar el perfil.");
-    } finally {
-      setIsSubmitting(false);
-    }
+  const cancelEditing = () => {
+    setEditingPostId(null);
+    setPostData({ title: '', excerpt: '', content: '', category: 'Sustentabilidad', image_url: '' });
   };
 
   const handlePostSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Generación de slug mejorada
     const slug = postData.title
       .toLowerCase()
       .trim()
-      .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Quitar tildes
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
       .replace(/[^\w\s-]/g, '')
       .replace(/[\s_-]+/g, '-')
       .replace(/^-+|-+$/g, '');
 
     try {
-      const { error } = await supabase
-        .from('blog_posts')
-        .insert([{ ...postData, slug, author_id: user?.id, published: true }]);
-
-      if (error) throw error;
-      toast.success("Publicado con éxito");
-      setPostData({ title: '', excerpt: '', content: '', category: 'Sustentabilidad', image_url: '' });
+      if (editingPostId) {
+        const { error } = await supabase
+          .from('blog_posts')
+          .update({ ...postData, slug })
+          .eq('id', editingPostId);
+        if (error) throw error;
+        toast.success("Noticia actualizada");
+      } else {
+        const { error } = await supabase
+          .from('blog_posts')
+          .insert([{ ...postData, slug, author_id: user?.id, published: true }]);
+        if (error) throw error;
+        toast.success("Publicado con éxito");
+      }
+      
+      cancelEditing();
       fetchMyPosts();
     } catch (err: any) {
-      console.error("[Dashboard] Error al insertar:", err);
-      toast.error("Error al publicar la noticia.");
+      toast.error("Error: " + err.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -137,42 +134,6 @@ const Dashboard = () => {
     </div>
   );
 
-  if (!user) return <div className="p-20 text-center font-black">Inicia sesión para continuar.</div>;
-
-  if (showOnboarding) {
-    return (
-      <div className="min-h-screen bg-ecly-light flex items-center justify-center p-4">
-        <form onSubmit={handleOnboardingSubmit} className="bg-white p-8 sm:p-12 rounded-[3rem] shadow-2xl max-w-xl w-full space-y-8 border-4 border-white">
-          <div className="text-center">
-            <h2 className="text-4xl font-black text-slate-900 mb-2">Tu Perfil de Autor</h2>
-            <p className="text-slate-500 font-bold">Completa tus datos para empezar.</p>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label className="font-black text-xs uppercase text-slate-400 ml-1">Nombre</Label>
-              <Input value={onboardingData.first_name} onChange={e => setOnboardingData({...onboardingData, first_name: e.target.value})} required className="rounded-2xl h-14 border-2"/>
-            </div>
-            <div className="space-y-2">
-              <Label className="font-black text-xs uppercase text-slate-400 ml-1">Apellido</Label>
-              <Input value={onboardingData.last_name} onChange={e => setOnboardingData({...onboardingData, last_name: e.target.value})} required className="rounded-2xl h-14 border-2"/>
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Label className="font-black text-xs uppercase text-slate-400 ml-1">URL Foto Perfil</Label>
-            <Input placeholder="https://..." value={onboardingData.avatar_url} onChange={e => setOnboardingData({...onboardingData, avatar_url: e.target.value})} className="rounded-2xl h-14 border-2"/>
-          </div>
-          <div className="space-y-2">
-            <Label className="font-black text-xs uppercase text-slate-400 ml-1">Tu Biografía (máx 256 car.)</Label>
-            <Textarea value={onboardingData.bio} onChange={e => setOnboardingData({...onboardingData, bio: e.target.value})} required className="rounded-2xl min-h-[100px] border-2" maxLength={256}/>
-          </div>
-          <Button type="submit" disabled={isSubmitting} className="w-full bg-ecly-green hover:bg-green-600 text-white font-black py-8 rounded-[2rem] text-xl shadow-[0_12px_0_0_#16a34a] hover:translate-y-1 transition-all">
-            {isSubmitting ? <Loader2 className="animate-spin" /> : "Guardar Perfil"}
-          </Button>
-        </form>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
       <Header />
@@ -180,23 +141,35 @@ const Dashboard = () => {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
           <div>
             <h1 className="text-5xl font-black text-slate-900 tracking-tight">Panel Editor</h1>
-            <p className="font-bold text-ecly-green text-lg">{profile?.first_name} {profile?.last_name}</p>
+            <p className="font-bold text-ecly-green text-lg">Sesión de {profile?.first_name || 'Autor'}</p>
           </div>
           <Button variant="outline" onClick={() => signOut()} className="text-slate-500 font-black border-2 rounded-full px-8 py-6 hover:bg-ecly-pop hover:text-white transition-all"><LogOut className="mr-2 h-4 w-4"/> Salir</Button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          {/* Formulario Principal */}
           <div className="lg:col-span-8">
-            <div className="bg-white p-10 rounded-[3.5rem] shadow-sm border border-slate-100">
-              <h2 className="text-3xl font-black mb-8 flex items-center gap-4 text-slate-900"><Plus className="text-ecly-green h-8 w-8"/> Nueva Noticia</h2>
+            <div className={`bg-white p-10 rounded-[3.5rem] shadow-sm border-2 ${editingPostId ? 'border-ecly-electric' : 'border-slate-100'}`}>
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="text-3xl font-black flex items-center gap-4 text-slate-900">
+                  {editingPostId ? <Edit3 className="text-ecly-electric h-8 w-8"/> : <Plus className="text-ecly-green h-8 w-8"/>}
+                  {editingPostId ? 'Editando Noticia' : 'Nueva Noticia'}
+                </h2>
+                {editingPostId && (
+                  <Button variant="ghost" onClick={cancelEditing} className="text-slate-400 font-bold hover:text-ecly-pop">
+                    <X className="h-5 w-5 mr-1"/> Cancelar
+                  </Button>
+                )}
+              </div>
+              
               <form onSubmit={handlePostSubmit} className="space-y-6">
                 <div className="space-y-2">
                   <Label className="font-black text-xs uppercase text-slate-400 ml-2">Título de la Publicación</Label>
-                  <Input placeholder="Ej: La revolución de la recarga" value={postData.title} onChange={e => setPostData({...postData, title: e.target.value})} required className="font-black py-8 text-xl rounded-2xl border-2"/>
+                  <Input value={postData.title} onChange={e => setPostData({...postData, title: e.target.value})} required className="font-black py-8 text-xl rounded-2xl border-2"/>
                 </div>
                 <div className="space-y-2">
                   <Label className="font-black text-xs uppercase text-slate-400 ml-2">Bajada / Resumen</Label>
-                  <Textarea placeholder="Breve descripción para el listado..." value={postData.excerpt} onChange={e => setPostData({...postData, excerpt: e.target.value})} required className="font-bold h-24 rounded-2xl border-2"/>
+                  <Textarea value={postData.excerpt} onChange={e => setPostData({...postData, excerpt: e.target.value})} required className="font-bold h-24 rounded-2xl border-2"/>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
@@ -209,34 +182,43 @@ const Dashboard = () => {
                   </div>
                   <div className="space-y-2">
                     <Label className="font-black text-xs uppercase text-slate-400 ml-2">URL Imagen Destacada</Label>
-                    <Input placeholder="https://images.unsplash.com/..." value={postData.image_url} onChange={e => setPostData({...postData, image_url: e.target.value})} required className="font-bold h-16 rounded-2xl border-2"/>
+                    <Input value={postData.image_url} onChange={e => setPostData({...postData, image_url: e.target.value})} required className="font-bold h-16 rounded-2xl border-2"/>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label className="font-black text-xs uppercase text-slate-400 ml-2">Contenido Completo (Markdown)</Label>
-                  <Textarea placeholder="Escribe tu artículo aquí..." value={postData.content} onChange={e => setPostData({...postData, content: e.target.value})} required className="font-bold h-80 rounded-2xl border-2 bg-slate-50 p-6 focus:border-ecly-green"/>
+                  <Label className="font-black text-xs uppercase text-slate-400 ml-2">Contenido (Markdown)</Label>
+                  <Textarea value={postData.content} onChange={e => setPostData({...postData, content: e.target.value})} required className="font-bold h-80 rounded-2xl border-2 bg-slate-50 p-6"/>
                 </div>
-                <Button type="submit" disabled={isSubmitting} className="w-full bg-slate-900 text-white font-black py-10 rounded-[2.5rem] text-2xl shadow-[0_12px_0_0_#000] hover:translate-y-1 transition-all">
-                  {isSubmitting ? <Loader2 className="animate-spin" /> : <><Send className="h-6 w-6 mr-2 inline"/> Publicar Noticia</>}
+                <Button 
+                  type="submit" 
+                  disabled={isSubmitting} 
+                  className={`w-full text-white font-black py-10 rounded-[2.5rem] text-2xl shadow-[0_12px_0_0_#000] hover:translate-y-1 transition-all ${editingPostId ? 'bg-ecly-electric hover:bg-blue-600' : 'bg-slate-900 hover:bg-black'}`}
+                >
+                  {isSubmitting ? <Loader2 className="animate-spin" /> : editingPostId ? "Guardar Cambios" : "Publicar Noticia"}
                 </Button>
               </form>
             </div>
           </div>
 
+          {/* Listado Lateral */}
           <div className="lg:col-span-4 space-y-8">
-            <h2 className="text-3xl font-black flex items-center gap-4 text-slate-900"><FileText className="text-ecly-green h-8 w-8"/> Historial</h2>
-            <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+            <h2 className="text-3xl font-black flex items-center gap-4 text-slate-900"><FileText className="text-ecly-green h-8 w-8"/> Tus Publicaciones</h2>
+            <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar">
               {myPosts.length > 0 ? myPosts.map(post => (
-                <div key={post.id} className="bg-white p-6 rounded-3xl flex justify-between items-center border border-slate-100 shadow-sm hover:border-ecly-green transition-colors group">
-                  <div className="truncate pr-4">
-                    <h3 className="font-black text-slate-800 truncate group-hover:text-ecly-green transition-colors">{post.title}</h3>
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{new Date(post.created_at).toLocaleDateString('es-AR')}</span>
+                <div key={post.id} className={`bg-white p-5 rounded-[2.5rem] border transition-all ${editingPostId === post.id ? 'border-ecly-electric bg-blue-50/30' : 'border-slate-100 shadow-sm hover:border-ecly-green'}`}>
+                  <h3 className="font-black text-slate-800 line-clamp-2 mb-2">{post.title}</h3>
+                  <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-50">
+                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{new Date(post.created_at).toLocaleDateString()}</span>
+                    <div className="flex gap-1">
+                      <Link to={`/blog/${post.slug || post.id}`} target="_blank">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-ecly-green"><Eye className="h-4 w-4"/></Button>
+                      </Link>
+                      <Button variant="ghost" size="icon" onClick={() => startEditing(post)} className="h-8 w-8 text-slate-400 hover:text-ecly-electric"><Edit3 className="h-4 w-4"/></Button>
+                      <Button variant="ghost" size="icon" onClick={() => deletePost(post.id)} className="h-8 w-8 text-slate-400 hover:text-ecly-pop"><Trash2 className="h-4 w-4"/></Button>
+                    </div>
                   </div>
-                  <Button variant="ghost" size="icon" onClick={() => deletePost(post.id)} className="text-slate-300 hover:text-ecly-pop">
-                    <Trash2 className="h-5 w-5"/>
-                  </Button>
                 </div>
-              )) : <p className="text-slate-400 font-bold italic text-center py-8">No has publicado nada aún.</p>}
+              )) : <p className="text-slate-400 font-bold italic text-center py-8">Aún no has escrito nada.</p>}
             </div>
           </div>
         </div>
