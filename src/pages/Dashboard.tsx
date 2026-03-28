@@ -11,12 +11,13 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { LogOut, Loader2, Plus, FileText, Trash2, Send, Edit3, X, Eye, Bold, Italic, List, ListOrdered, Heading1, Link as LinkIcon } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
 const Dashboard = () => {
   const { user, profile, loading, signOut } = useAuth();
+  const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [myPosts, setMyPosts] = useState<any[]>([]);
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
@@ -31,10 +32,15 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
+    // Protección de ruta: Si no hay usuario y ya terminó de cargar, mandamos a login
+    if (!loading && !user) {
+      navigate('/access', { replace: true });
+    }
+    
     if (user && !loading) {
       fetchMyPosts();
     }
-  }, [loading, user]);
+  }, [loading, user, navigate]);
 
   const fetchMyPosts = async () => {
     const { data } = await supabase
@@ -60,7 +66,6 @@ const Dashboard = () => {
     const newContent = before + tag + selection + (endTag || tag) + after;
     setPostData({ ...postData, content: newContent });
     
-    // Devolver foco y posición
     setTimeout(() => {
       textarea.focus();
       textarea.setSelectionRange(start + tag.length, end + tag.length);
@@ -132,7 +137,7 @@ const Dashboard = () => {
     }
   };
 
-  if (loading) return (
+  if (loading || !user) return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50">
       <Loader2 className="animate-spin h-10 w-10 text-ecly-green" />
     </div>

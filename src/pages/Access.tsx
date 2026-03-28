@@ -14,12 +14,23 @@ const Access = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (session) {
-      navigate('/dashboard');
+    // Si la sesión ya existe, redirigimos al dashboard inmediatamente
+    if (!loading && session) {
+      navigate('/dashboard', { replace: true });
     }
-  }, [session, navigate]);
+  }, [session, loading, navigate]);
 
-  if (loading) return null;
+  // Mientras verifica la sesión, no mostramos el formulario para evitar parpadeos
+  if (loading || session) {
+    return (
+      <div className="min-h-screen bg-ecly-light flex items-center justify-center">
+        <div className="animate-pulse flex flex-col items-center gap-4">
+          <div className="h-12 w-12 bg-ecly-green rounded-full"></div>
+          <p className="font-black text-slate-400 uppercase tracking-widest text-xs">Verificando acceso...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-ecly-light flex flex-col">
@@ -34,8 +45,34 @@ const Access = () => {
             supabaseClient={supabase}
             view="sign_in"
             showLinks={false}
-            appearance={{ theme: ThemeSupa, variables: { default: { colors: { brand: '#22c55e', brandAccent: '#16a34a' } } } }}
+            appearance={{ 
+              theme: ThemeSupa, 
+              variables: { 
+                default: { 
+                  colors: { 
+                    brand: '#22c55e', 
+                    brandAccent: '#16a34a' 
+                  },
+                  radii: {
+                    buttonRadius: '1rem',
+                    inputRadius: '1rem'
+                  }
+                } 
+              } 
+            }}
             providers={[]}
+            localization={{
+              variables: {
+                sign_in: {
+                  email_label: 'Correo electrónico',
+                  password_label: 'Contraseña',
+                  button_label: 'Entrar al Panel',
+                  loading_button_label: 'Iniciando sesión...',
+                  email_input_placeholder: 'tu@email.com',
+                  password_input_placeholder: 'Tu contraseña'
+                }
+              }
+            }}
           />
         </div>
       </main>
