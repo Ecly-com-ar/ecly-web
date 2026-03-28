@@ -68,8 +68,6 @@ const Dashboard = () => {
     setIsSubmitting(true);
     
     try {
-      // Usamos update en lugar de upsert porque el trigger ya crea la fila en el signup.
-      // Upsert requiere permisos de INSERT que podrían estar faltando en RLS.
       const { error } = await supabase
         .from('profiles')
         .update({
@@ -88,7 +86,7 @@ const Dashboard = () => {
       setShowOnboarding(false);
     } catch (err: any) {
       console.error("[Dashboard] Error al actualizar perfil:", err);
-      toast.error("No se pudo guardar el perfil: " + (err.message || "Error desconocido"));
+      toast.error("No se pudo guardar el perfil.");
     } finally {
       setIsSubmitting(false);
     }
@@ -97,7 +95,15 @@ const Dashboard = () => {
   const handlePostSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const slug = postData.title.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-');
+    
+    // Generación de slug mejorada
+    const slug = postData.title
+      .toLowerCase()
+      .trim()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Quitar tildes
+      .replace(/[^\w\s-]/g, '')
+      .replace(/[\s_-]+/g, '-')
+      .replace(/^-+|-+$/g, '');
 
     try {
       const { error } = await supabase
@@ -109,14 +115,15 @@ const Dashboard = () => {
       setPostData({ title: '', excerpt: '', content: '', category: 'Sustentabilidad', image_url: '' });
       fetchMyPosts();
     } catch (err: any) {
-      toast.error("Error al publicar: " + err.message);
+      console.error("[Dashboard] Error al insertar:", err);
+      toast.error("Error al publicar la noticia.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const deletePost = async (id: string) => {
-    if (!confirm("¿Eliminar?")) return;
+    if (!confirm("¿Deseas eliminar esta publicación permanentemente?")) return;
     const { error } = await supabase.from('blog_posts').delete().eq('id', id);
     if (!error) {
       toast.success("Eliminado");
@@ -142,21 +149,21 @@ const Dashboard = () => {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="font-black text-xs uppercase text-slate-400">Nombre</Label>
-              <Input value={onboardingData.first_name} onChange={e => setOnboardingData({...onboardingData, first_name: e.target.value})} required className="rounded-2xl h-14"/>
+              <Label className="font-black text-xs uppercase text-slate-400 ml-1">Nombre</Label>
+              <Input value={onboardingData.first_name} onChange={e => setOnboardingData({...onboardingData, first_name: e.target.value})} required className="rounded-2xl h-14 border-2"/>
             </div>
             <div className="space-y-2">
-              <Label className="font-black text-xs uppercase text-slate-400">Apellido</Label>
-              <Input value={onboardingData.last_name} onChange={e => setOnboardingData({...onboardingData, last_name: e.target.value})} required className="rounded-2xl h-14"/>
+              <Label className="font-black text-xs uppercase text-slate-400 ml-1">Apellido</Label>
+              <Input value={onboardingData.last_name} onChange={e => setOnboardingData({...onboardingData, last_name: e.target.value})} required className="rounded-2xl h-14 border-2"/>
             </div>
           </div>
           <div className="space-y-2">
-            <Label className="font-black text-xs uppercase text-slate-400">URL Foto</Label>
-            <Input value={onboardingData.avatar_url} onChange={e => setOnboardingData({...onboardingData, avatar_url: e.target.value})} className="rounded-2xl h-14"/>
+            <Label className="font-black text-xs uppercase text-slate-400 ml-1">URL Foto Perfil</Label>
+            <Input placeholder="https://..." value={onboardingData.avatar_url} onChange={e => setOnboardingData({...onboardingData, avatar_url: e.target.value})} className="rounded-2xl h-14 border-2"/>
           </div>
           <div className="space-y-2">
-            <Label className="font-black text-xs uppercase text-slate-400">Biografía</Label>
-            <Textarea value={onboardingData.bio} onChange={e => setOnboardingData({...onboardingData, bio: e.target.value})} required className="rounded-2xl min-h-[100px]" maxLength={256}/>
+            <Label className="font-black text-xs uppercase text-slate-400 ml-1">Tu Biografía (máx 256 car.)</Label>
+            <Textarea value={onboardingData.bio} onChange={e => setOnboardingData({...onboardingData, bio: e.target.value})} required className="rounded-2xl min-h-[100px] border-2" maxLength={256}/>
           </div>
           <Button type="submit" disabled={isSubmitting} className="w-full bg-ecly-green hover:bg-green-600 text-white font-black py-8 rounded-[2rem] text-xl shadow-[0_12px_0_0_#16a34a] hover:translate-y-1 transition-all">
             {isSubmitting ? <Loader2 className="animate-spin" /> : "Guardar Perfil"}
@@ -184,16 +191,16 @@ const Dashboard = () => {
               <h2 className="text-3xl font-black mb-8 flex items-center gap-4 text-slate-900"><Plus className="text-ecly-green h-8 w-8"/> Nueva Noticia</h2>
               <form onSubmit={handlePostSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <Label className="font-black text-xs uppercase text-slate-400">Título</Label>
-                  <Input value={postData.title} onChange={e => setPostData({...postData, title: e.target.value})} required className="font-black py-8 text-xl rounded-2xl border-2"/>
+                  <Label className="font-black text-xs uppercase text-slate-400 ml-2">Título de la Publicación</Label>
+                  <Input placeholder="Ej: La revolución de la recarga" value={postData.title} onChange={e => setPostData({...postData, title: e.target.value})} required className="font-black py-8 text-xl rounded-2xl border-2"/>
                 </div>
                 <div className="space-y-2">
-                  <Label className="font-black text-xs uppercase text-slate-400">Bajada</Label>
-                  <Textarea value={postData.excerpt} onChange={e => setPostData({...postData, excerpt: e.target.value})} required className="font-bold h-24 rounded-2xl border-2"/>
+                  <Label className="font-black text-xs uppercase text-slate-400 ml-2">Bajada / Resumen</Label>
+                  <Textarea placeholder="Breve descripción para el listado..." value={postData.excerpt} onChange={e => setPostData({...postData, excerpt: e.target.value})} required className="font-bold h-24 rounded-2xl border-2"/>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label className="font-black text-xs uppercase text-slate-400">Categoría</Label>
+                    <Label className="font-black text-xs uppercase text-slate-400 ml-2">Categoría</Label>
                     <select className="flex h-16 w-full items-center justify-between rounded-2xl border-2 border-slate-200 bg-background px-4 py-2 font-bold appearance-none" value={postData.category} onChange={e => setPostData({...postData, category: e.target.value})}>
                       <option>Sustentabilidad</option>
                       <option>Comunidad</option>
@@ -201,16 +208,16 @@ const Dashboard = () => {
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <Label className="font-black text-xs uppercase text-slate-400">URL Imagen</Label>
-                    <Input value={postData.image_url} onChange={e => setPostData({...postData, image_url: e.target.value})} required className="font-bold h-16 rounded-2xl border-2"/>
+                    <Label className="font-black text-xs uppercase text-slate-400 ml-2">URL Imagen Destacada</Label>
+                    <Input placeholder="https://images.unsplash.com/..." value={postData.image_url} onChange={e => setPostData({...postData, image_url: e.target.value})} required className="font-bold h-16 rounded-2xl border-2"/>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label className="font-black text-xs uppercase text-slate-400">Contenido (Markdown)</Label>
-                  <Textarea value={postData.content} onChange={e => setPostData({...postData, content: e.target.value})} required className="font-bold h-80 rounded-2xl border-2 bg-slate-50 p-6"/>
+                  <Label className="font-black text-xs uppercase text-slate-400 ml-2">Contenido Completo (Markdown)</Label>
+                  <Textarea placeholder="Escribe tu artículo aquí..." value={postData.content} onChange={e => setPostData({...postData, content: e.target.value})} required className="font-bold h-80 rounded-2xl border-2 bg-slate-50 p-6 focus:border-ecly-green"/>
                 </div>
                 <Button type="submit" disabled={isSubmitting} className="w-full bg-slate-900 text-white font-black py-10 rounded-[2.5rem] text-2xl shadow-[0_12px_0_0_#000] hover:translate-y-1 transition-all">
-                  {isSubmitting ? <Loader2 className="animate-spin" /> : <Send className="h-6 w-6 mr-2 inline"/>} Publicar Noticia
+                  {isSubmitting ? <Loader2 className="animate-spin" /> : <><Send className="h-6 w-6 mr-2 inline"/> Publicar Noticia</>}
                 </Button>
               </form>
             </div>
@@ -218,18 +225,18 @@ const Dashboard = () => {
 
           <div className="lg:col-span-4 space-y-8">
             <h2 className="text-3xl font-black flex items-center gap-4 text-slate-900"><FileText className="text-ecly-green h-8 w-8"/> Historial</h2>
-            <div className="space-y-4">
+            <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
               {myPosts.length > 0 ? myPosts.map(post => (
-                <div key={post.id} className="bg-white p-6 rounded-3xl flex justify-between items-center border border-slate-100 shadow-sm">
+                <div key={post.id} className="bg-white p-6 rounded-3xl flex justify-between items-center border border-slate-100 shadow-sm hover:border-ecly-green transition-colors group">
                   <div className="truncate pr-4">
-                    <h3 className="font-black text-slate-800 truncate">{post.title}</h3>
-                    <span className="text-[10px] font-black text-slate-400">{new Date(post.created_at).toLocaleDateString()}</span>
+                    <h3 className="font-black text-slate-800 truncate group-hover:text-ecly-green transition-colors">{post.title}</h3>
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{new Date(post.created_at).toLocaleDateString('es-AR')}</span>
                   </div>
                   <Button variant="ghost" size="icon" onClick={() => deletePost(post.id)} className="text-slate-300 hover:text-ecly-pop">
                     <Trash2 className="h-5 w-5"/>
                   </Button>
                 </div>
-              )) : <p className="text-slate-400 font-bold italic text-center py-8">No hay noticias.</p>}
+              )) : <p className="text-slate-400 font-bold italic text-center py-8">No has publicado nada aún.</p>}
             </div>
           </div>
         </div>
