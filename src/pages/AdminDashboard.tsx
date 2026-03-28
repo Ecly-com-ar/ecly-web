@@ -11,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { PlusCircle, FileText, LayoutDashboard, LogOut } from 'lucide-react';
+import { PlusCircle, FileText, LayoutDashboard, LogOut, Loader2, ShieldAlert } from 'lucide-react';
 
 const AdminDashboard = () => {
   const { user, role, loading, signOut } = useAuth();
@@ -25,9 +25,37 @@ const AdminDashboard = () => {
     image_url: ''
   });
 
-  if (loading) return null;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
+        <Loader2 className="h-12 w-12 text-ecly-green animate-spin mb-4" />
+        <p className="font-black text-slate-900">Verificando permisos...</p>
+      </div>
+    );
+  }
+
+  // Si no hay usuario o el rol no es editor/admin, mostrar aviso de falta de permisos
   if (!user || (role !== 'editor' && role !== 'admin')) {
-    return <Navigate to="/access" replace />;
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 p-4 text-center">
+        <div className="bg-white p-12 rounded-[3rem] shadow-xl max-w-md border-4 border-white">
+          <ShieldAlert className="h-20 w-20 text-ecly-pop mx-auto mb-6" />
+          <h1 className="text-3xl font-black text-slate-900 mb-4">Acceso Denegado</h1>
+          <p className="text-slate-500 font-bold mb-8">
+            Tu cuenta está registrada como <span className="text-ecly-pop uppercase">{role || 'Sin Rol'}</span>. 
+            Necesitas permisos de Editor para entrar aquí.
+          </p>
+          <div className="flex flex-col gap-4">
+            <Button onClick={() => navigate('/')} className="rounded-full bg-slate-900 font-black py-6">
+              Volver al Inicio
+            </Button>
+            <Button variant="ghost" onClick={() => signOut()} className="font-bold text-slate-400">
+              Cerrar Sesión
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -66,7 +94,6 @@ const AdminDashboard = () => {
       <Header />
       <main className="flex-1 pt-32 pb-24">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
             <div>
               <h1 className="text-4xl font-black text-slate-900">Panel de Editor</h1>
@@ -82,7 +109,6 @@ const AdminDashboard = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            {/* Sidebar / Stats */}
             <div className="lg:col-span-4 space-y-6">
               <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
                 <div className="flex items-center gap-4 mb-6">
@@ -102,7 +128,6 @@ const AdminDashboard = () => {
               </div>
             </div>
 
-            {/* Formulario */}
             <div className="lg:col-span-8">
               <div className="bg-white p-8 sm:p-12 rounded-[3rem] shadow-sm border border-slate-100">
                 <h3 className="text-2xl font-black text-slate-900 mb-8">Crear nuevo artículo</h3>
@@ -118,18 +143,16 @@ const AdminDashboard = () => {
                       required
                     />
                   </div>
-
                   <div className="space-y-3">
                     <Label className="text-xs font-black uppercase tracking-widest text-slate-500">Resumen (Excerpt)</Label>
                     <Textarea 
-                      placeholder="Una breve descripción que atrape al lector..."
+                      placeholder="Una breve descripción..."
                       value={formData.excerpt}
                       onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
                       className="min-h-[100px] py-4 px-6 rounded-2xl border-2 border-slate-100 focus:border-ecly-green focus-visible:ring-0 font-bold"
                       required
                     />
                   </div>
-
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-3">
                       <Label className="text-xs font-black uppercase tracking-widest text-slate-500">Categoría</Label>
@@ -156,18 +179,16 @@ const AdminDashboard = () => {
                       />
                     </div>
                   </div>
-
                   <div className="space-y-3">
                     <Label className="text-xs font-black uppercase tracking-widest text-slate-500">Contenido completo</Label>
                     <Textarea 
-                      placeholder="Escribe el cuerpo del artículo aquí..."
+                      placeholder="Escribe el cuerpo del artículo..."
                       value={formData.content}
                       onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                      className="min-h-[300px] py-4 px-6 rounded-2xl border-2 border-slate-100 focus:border-ecly-green focus-visible:ring-0 font-bold leading-relaxed"
+                      className="min-h-[300px] py-4 px-6 rounded-2xl border-2 border-slate-100 focus:border-ecly-green focus-visible:ring-0 font-bold"
                       required
                     />
                   </div>
-
                   <Button 
                     type="submit" 
                     disabled={isSubmitting}

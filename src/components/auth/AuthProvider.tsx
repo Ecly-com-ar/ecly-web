@@ -20,21 +20,45 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const fetchRole = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', userId)
+        .single();
+      
+      if (data) {
+        setRole(data.role);
+      } else if (error) {
+        console.error("[Auth] Error fetching role:", error.message);
+      }
+    } catch (err) {
+      console.error("[Auth] Unexpected error fetching role:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     // Obtener sesión inicial
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
-      if (session?.user) fetchRole(session.user.id);
-      else setLoading(false);
+      if (session?.user) {
+        fetchRole(session.user.id);
+      } else {
+        setLoading(false);
+      }
     });
 
     // Escuchar cambios de estado
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
-      if (session?.user) await fetchRole(session.user.id);
-      else {
+      if (session?.user) {
+        await fetchRole(session.user.id);
+      } else {
         setRole(null);
         setLoading(false);
       }
@@ -43,18 +67,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const fetchRole = async (userId: string) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', userId)
-      .single();
-    
-    if (data) setRole(data.role);
-    setLoading(false);
-  };
-
   const signOut = async () => {
+    setLoading(true);
     await supabase.auth.signOut();
   };
 
