@@ -5,83 +5,98 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Link } from 'react-router-dom';
 import { blogPosts } from '@/data/blogPosts';
-import { Clock, ArrowLeft } from 'lucide-react';
+import { Calendar, User, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 const Blog = () => {
-  // Flag para alternar entre el mensaje de próximamente y el contenido real
-  const isAvailable = false;
+  // Ahora el blog está disponible para todos
+  const isAvailable = true;
 
-  // Función para limitar caracteres
-  const formatTitle = (title: string, limit: number = 60) => {
-    return title.length > limit ? title.substring(0, limit) + "..." : title;
-  };
-
-  // Datos para cuando se habilite
   const mainPost = blogPosts[0];
-  const featuredPosts = blogPosts.slice(1, 3);
+  const otherPosts = blogPosts.slice(1);
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col bg-white text-slate-900">
+    <div className="relative flex min-h-screen w-full flex-col bg-white text-slate-900 selection:bg-ecly-vibrant selection:text-ecly-dark">
       <Header />
       
-      <main className="flex-1 pt-32 pb-20">
-        {!isAvailable ? (
-          /* Vista de Próximamente */
-          <div className="mx-auto max-w-2xl px-4 text-center">
-            <div className="inline-flex h-20 w-20 items-center justify-center rounded-[1.5rem] bg-ecly-light text-ecly-green mb-8 shadow-sm">
-              <Clock className="h-10 w-10" />
-            </div>
-            
-            <h1 className="text-5xl md:text-7xl font-black text-slate-900 mb-6 italic tracking-tight">
-              Próximamente
+      <main className="flex-1 pt-32 pb-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          
+          {/* Encabezado del Blog */}
+          <div className="mb-16 text-center lg:text-left">
+            <Badge className="bg-ecly-light text-ecly-green hover:bg-ecly-light border-none px-4 py-1 rounded-full font-black uppercase tracking-widest mb-4">
+              Magazine
+            </Badge>
+            <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tight leading-none mb-6">
+              Historias de <span className="text-ecly-green">Cambio</span>
             </h1>
-            
-            <p className="text-xl text-slate-600 font-bold mb-12 leading-relaxed max-w-lg mx-auto">
-              Estamos preparando las mejores historias, consejos de limpieza sustentable y novedades para vos.
+            <p className="text-xl text-slate-600 font-bold max-w-2xl leading-relaxed">
+              Exploramos el impacto de la economía circular, consejos de vida sustentable y las novedades de la revolución Ecly.
             </p>
-            
-            <Link to="/">
-              <Button className="bg-ecly-green hover:bg-green-700 text-white rounded-full px-10 py-7 text-lg font-black shadow-lg transition-all border-none">
-                <ArrowLeft className="mr-2 h-5 w-5" /> Volver al inicio
-              </Button>
-            </Link>
           </div>
-        ) : (
-          /* Contenido del Blog (Oculto hasta que isAvailable sea true) */
-          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <section className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-              <div className="lg:col-span-8">
-                <Link to={`/blog/${mainPost.id}`} className="group block">
-                  <div className="relative aspect-[16/10] rounded-[3rem] overflow-hidden border border-slate-100 mb-8">
-                    <img src={mainPost.image} alt={mainPost.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                  </div>
-                  <div className="text-center">
-                    <div className="text-xs font-black text-ecly-green mb-4 tracking-[0.2em] uppercase">Ecly • Sustentable</div>
-                    <h2 className="text-3xl md:text-5xl font-black text-slate-900 line-clamp-2">{formatTitle(mainPost.title)}</h2>
-                  </div>
-                </Link>
+
+          {/* Post Destacado */}
+          <section className="mb-20">
+            <Link to={`/blog/${mainPost.id}`} className="group relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-slate-50 rounded-[3.5rem] overflow-hidden p-6 sm:p-10 hover:bg-ecly-light/50 transition-all duration-500 border border-slate-100 shadow-sm">
+              <div className="lg:col-span-7 aspect-[16/10] overflow-hidden rounded-[2.5rem] shadow-2xl">
+                <img 
+                  src={mainPost.image} 
+                  alt={mainPost.title} 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
               </div>
-              
-              <div className="lg:col-span-4">
-                <h3 className="text-2xl font-black mb-8 italic">Destacados</h3>
-                <div className="space-y-8">
-                  {featuredPosts.map((post) => (
-                    <Link key={post.id} to={`/blog/${post.id}`} className="flex gap-4 group items-center">
-                      <div className="w-20 h-20 shrink-0 rounded-2xl overflow-hidden border border-slate-100">
-                        <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
-                      </div>
-                      <div className="flex flex-col">
-                        <h4 className="font-black text-slate-900 group-hover:text-ecly-green line-clamp-2">{formatTitle(post.title)}</h4>
-                        <span className="text-xs font-bold text-slate-400">{post.date}</span>
-                      </div>
-                    </Link>
-                  ))}
+              <div className="lg:col-span-5 flex flex-col justify-center space-y-6">
+                <div className="flex items-center gap-4 text-xs font-black text-ecly-green uppercase tracking-widest">
+                  <span className="bg-white px-3 py-1 rounded-full shadow-sm">{mainPost.category}</span>
+                  <span className="text-slate-400">{mainPost.date}</span>
+                </div>
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 group-hover:text-ecly-green transition-colors leading-tight">
+                  {mainPost.title}
+                </h2>
+                <p className="text-lg text-slate-600 font-medium line-clamp-3 leading-relaxed">
+                  {mainPost.excerpt}
+                </p>
+                <div className="pt-4">
+                  <Button className="bg-slate-900 text-white hover:bg-ecly-green rounded-full px-10 py-7 text-lg font-black transition-all group-hover:translate-x-2 border-none">
+                    Leer artículo <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
                 </div>
               </div>
-            </section>
+            </Link>
+          </section>
+
+          {/* Grilla de otros artículos */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+            {otherPosts.map((post) => (
+              <Link key={post.id} to={`/blog/${post.id}`} className="group flex flex-col">
+                <div className="aspect-[4/3] rounded-[2.5rem] overflow-hidden mb-6 shadow-lg border border-slate-100">
+                  <img 
+                    src={post.image} 
+                    alt={post.title} 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                </div>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 text-xs font-black text-ecly-green uppercase tracking-widest">
+                    <span>{post.category}</span>
+                    <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
+                    <span className="text-slate-400">{post.date}</span>
+                  </div>
+                  <h3 className="text-2xl font-black text-slate-900 group-hover:text-ecly-green transition-colors leading-tight line-clamp-2">
+                    {post.title}
+                  </h3>
+                  <p className="text-slate-600 font-medium line-clamp-2 leading-relaxed">
+                    {post.excerpt}
+                  </p>
+                  <div className="pt-2 flex items-center text-slate-900 font-black group-hover:text-ecly-green transition-colors">
+                    Seguir leyendo <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
-        )}
+        </div>
       </main>
       
       <Footer />
