@@ -20,56 +20,79 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchRole = async (userId: string) => {
+  const getProfileRole = async (userId: string) => {
     try {
+      // Intentamos obtener el rol con un tiempo límite implícito
       const { data, error } = await supabase
         .from('profiles')
         .select('role')
         .eq('id', userId)
-        .single();
+        .maybeSingle(); // Usamos maybeSingle para evitar errores si la fila no existe aún
       
       if (data) {
         setRole(data.role);
-      } else if (error) {
-        console.error("[Auth] Error fetching role:", error.message);
+      } else {
+        // Si no hay datos, asignamos un rol por defecto o nulo
+        setRole('viewer');
       }
     } catch (err) {
-      console.error("[Auth] Unexpected error fetching role:", err);
+      console.error("[Auth] Error en fetch de perfil:", err);
+      setRole('viewer');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    // Obtener sesión inicial
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchRole(session.user.id);
+    let mounted = true;
+
+    const initialize = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!mounted) return;
+
+      if (session) {
+        setSession(session);
+        setUser(session.user);
+        await getProfileRole(session.user.id);
       } else {
         setLoading(false);
       }
-    });
+    };
 
-    // Escuchar cambios de estado
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        await fetchRole(session.user.id);
-      } else {
+    initialize();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
+      if (!mounted) return;
+
+      if (event === 'SIGNED_OUT') {
+        setSession(null);
+        setUser(null);
         setRole(null);
         setLoading(false);
+      } else if (currentSession) {
+        setSession(currentSession);
+        setUser(currentSession.user);
+        await getProfileRole(currentSession.user.id);
+      } else {
+        setLoading(false);
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signOut = async () => {
     setLoading(true);
-    await supabase.auth.signOut();
+    try {
+      await supabase.auth.signOut();
+    } finally {
+      // Aseguramos que el loading pare incluso si falla el signout
+      setLoading(false);
+    }
   };
 
   return (
