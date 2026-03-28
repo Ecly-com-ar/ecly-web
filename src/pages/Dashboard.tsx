@@ -10,8 +10,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { LogOut, Loader2, Plus, FileText, Trash2, UserCircle, Send, Edit3, X, Eye } from 'lucide-react';
+import { LogOut, Loader2, Plus, FileText, Trash2, UserCircle, Send, Edit3, X, Eye, Layout } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 
 const Dashboard = () => {
   const { user, profile, loading, signOut, refreshProfile } = useAuth();
@@ -19,6 +20,7 @@ const Dashboard = () => {
   const [myPosts, setMyPosts] = useState<any[]>([]);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
+  const [previewMode, setPreviewMode] = useState(false);
   
   const [onboardingData, setOnboardingData] = useState({
     first_name: '',
@@ -74,12 +76,14 @@ const Dashboard = () => {
       category: post.category,
       image_url: post.image_url
     });
+    setPreviewMode(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const cancelEditing = () => {
     setEditingPostId(null);
     setPostData({ title: '', excerpt: '', content: '', category: 'Sustentabilidad', image_url: '' });
+    setPreviewMode(false);
   };
 
   const handlePostSubmit = async (e: React.FormEvent) => {
@@ -149,9 +153,9 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Formulario Principal */}
           <div className="lg:col-span-8">
-            <div className={`bg-white p-10 rounded-[3.5rem] shadow-sm border-2 ${editingPostId ? 'border-ecly-electric' : 'border-slate-100'}`}>
+            <div className={`bg-white p-6 sm:p-10 rounded-[3.5rem] shadow-sm border-2 ${editingPostId ? 'border-ecly-electric' : 'border-slate-100'}`}>
               <div className="flex justify-between items-center mb-8">
-                <h2 className="text-3xl font-black flex items-center gap-4 text-slate-900">
+                <h2 className="text-2xl sm:text-3xl font-black flex items-center gap-4 text-slate-900">
                   {editingPostId ? <Edit3 className="text-ecly-electric h-8 w-8"/> : <Plus className="text-ecly-green h-8 w-8"/>}
                   {editingPostId ? 'Editando Noticia' : 'Nueva Noticia'}
                 </h2>
@@ -185,10 +189,50 @@ const Dashboard = () => {
                     <Input value={postData.image_url} onChange={e => setPostData({...postData, image_url: e.target.value})} required className="font-bold h-16 rounded-2xl border-2"/>
                   </div>
                 </div>
+
+                {/* Editor con Preview */}
                 <div className="space-y-2">
-                  <Label className="font-black text-xs uppercase text-slate-400 ml-2">Contenido (Markdown)</Label>
-                  <Textarea value={postData.content} onChange={e => setPostData({...postData, content: e.target.value})} required className="font-bold h-80 rounded-2xl border-2 bg-slate-50 p-6"/>
+                  <div className="flex items-center justify-between ml-2">
+                    <Label className="font-black text-xs uppercase text-slate-400">Contenido del Artículo</Label>
+                    <div className="flex bg-slate-100 p-1 rounded-xl">
+                      <button 
+                        type="button"
+                        onClick={() => setPreviewMode(false)}
+                        className={`px-4 py-1.5 text-xs font-black rounded-lg transition-all ${!previewMode ? 'bg-white shadow-sm text-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
+                      >
+                        Editor
+                      </button>
+                      <button 
+                        type="button"
+                        onClick={() => setPreviewMode(true)}
+                        className={`px-4 py-1.5 text-xs font-black rounded-lg transition-all ${previewMode ? 'bg-white shadow-sm text-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
+                      >
+                        Vista Previa
+                      </button>
+                    </div>
+                  </div>
+                  
+                  {previewMode ? (
+                    <div className="min-h-[400px] rounded-2xl border-2 border-slate-100 bg-slate-50 p-8 prose prose-slate max-w-none overflow-y-auto">
+                      {postData.content ? (
+                        <div className="markdown-content">
+                          <ReactMarkdown>{postData.content}</ReactMarkdown>
+                        </div>
+                      ) : (
+                        <p className="text-slate-300 font-bold italic text-center pt-20">Nada que previsualizar todavía...</p>
+                      )}
+                    </div>
+                  ) : (
+                    <Textarea 
+                      value={postData.content} 
+                      onChange={e => setPostData({...postData, content: e.target.value})} 
+                      placeholder="Usa Markdown para dar formato (## Títulos, **Negritas**, etc.)"
+                      required 
+                      className="font-bold h-[400px] rounded-2xl border-2 bg-slate-50 p-6 focus:bg-white transition-colors"
+                    />
+                  )}
                 </div>
+
                 <Button 
                   type="submit" 
                   disabled={isSubmitting} 
@@ -203,7 +247,7 @@ const Dashboard = () => {
           {/* Listado Lateral */}
           <div className="lg:col-span-4 space-y-8">
             <h2 className="text-3xl font-black flex items-center gap-4 text-slate-900"><FileText className="text-ecly-green h-8 w-8"/> Tus Publicaciones</h2>
-            <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar">
+            <div className="space-y-4 max-h-[80vh] overflow-y-auto pr-2 custom-scrollbar">
               {myPosts.length > 0 ? myPosts.map(post => (
                 <div key={post.id} className={`bg-white p-5 rounded-[2.5rem] border transition-all ${editingPostId === post.id ? 'border-ecly-electric bg-blue-50/30' : 'border-slate-100 shadow-sm hover:border-ecly-green'}`}>
                   <h3 className="font-black text-slate-800 line-clamp-2 mb-2">{post.title}</h3>
