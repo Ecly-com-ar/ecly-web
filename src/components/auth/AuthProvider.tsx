@@ -7,6 +7,7 @@ import { Session, User } from '@supabase/supabase-js';
 type Profile = {
   role: string | null;
   first_name: string | null;
+  last_name: string | null;
   bio: string | null;
   avatar_url: string | null;
 };
@@ -32,14 +33,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const { data } = await supabase
         .from('profiles')
-        .select('role, first_name, bio, avatar_url')
+        .select('role, first_name, last_name, bio, avatar_url')
         .eq('id', userId)
         .maybeSingle();
       
       if (data) {
         setProfile(data);
       } else {
-        setProfile({ role: 'editor', first_name: '', bio: '', avatar_url: '' });
+        setProfile({ role: 'editor', first_name: '', last_name: '', bio: '', avatar_url: '' });
       }
     } catch (err) {
       console.error("[Auth] Error fetching profile:", err);

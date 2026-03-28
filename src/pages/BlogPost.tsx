@@ -45,7 +45,7 @@ const BlogPost = () => {
 
           <div className="flex items-center gap-6 mb-8 text-sm font-bold text-slate-400 uppercase tracking-widest">
             <div className="flex items-center gap-2"><Calendar className="h-4 w-4" /> {new Date(post.created_at).toLocaleDateString()}</div>
-            <div className="flex items-center gap-2"><User className="h-4 w-4" /> {author?.first_name || 'Equipo Ecly'}</div>
+            <div className="flex items-center gap-2"><User className="h-4 w-4" /> {author ? `${author.first_name} ${author.last_name}` : 'Equipo Ecly'}</div>
           </div>
 
           <h1 className="text-4xl md:text-6xl font-black text-slate-900 mb-8 leading-tight">{post.title}</h1>
@@ -58,18 +58,18 @@ const BlogPost = () => {
             <p className="text-xl font-bold text-ecly-green/80 italic mb-10 border-l-4 border-ecly-green pl-6 leading-relaxed">
               {post.excerpt}
             </p>
-            <div className="markdown-content font-medium leading-relaxed text-slate-700">
+            <div className="markdown-content font-medium leading-relaxed text-slate-700 whitespace-pre-wrap">
               <ReactMarkdown>{post.content}</ReactMarkdown>
             </div>
           </div>
 
           <div className="bg-slate-50 p-10 rounded-[3rem] flex flex-col md:flex-row gap-8 items-center border border-slate-100">
-            <div className="h-20 w-20 rounded-2xl overflow-hidden bg-white shrink-0 shadow-sm">
+            <div className="h-24 w-24 rounded-2xl overflow-hidden bg-white shrink-0 shadow-sm border-4 border-white">
               {author?.avatar_url ? <img src={author.avatar_url} className="w-full h-full object-cover"/> : <UserCircle className="w-full h-full p-4 text-slate-200"/>}
             </div>
             <div className="text-center md:text-left">
-              <h4 className="text-xl font-black text-slate-900 mb-1">Escrito por {author?.first_name || 'Equipo Ecly'}</h4>
-              <p className="text-slate-500 font-bold text-sm leading-relaxed">{author?.bio || 'Colaborador de Ecly.'}</p>
+              <h4 className="text-2xl font-black text-slate-900 mb-1">Escrito por {author ? `${author.first_name} ${author.last_name}` : 'Equipo Ecly'}</h4>
+              <p className="text-slate-500 font-bold text-base leading-relaxed max-w-lg">{author?.bio || 'Colaborador oficial de Ecly.'}</p>
             </div>
           </div>
         </article>
