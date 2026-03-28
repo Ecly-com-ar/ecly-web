@@ -1,82 +1,86 @@
 "use client";
 
-import React from 'react';
-import { useParams, Link, Navigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { blogPosts } from '@/data/blogPosts';
-import { ArrowLeft, Calendar, User, Share2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { ArrowLeft, Calendar, User, Share2, Loader2, UserCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const BlogPost = () => {
   const { postID } = useParams();
-  const post = blogPosts.find(p => p.id === postID);
+  const [post, setPost] = useState<any>(null);
+  const [author, setAuthor] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!post) {
-    return <Navigate to="/blog" replace />;
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      // Intentar buscar por ID o por Slug
+      const { data: postData } = await supabase
+        .from('blog_posts')
+        .select('*, author:profiles(*)')
+        .or(`id.eq.${postID},slug.eq.${postID}`)
+        .single();
+
+      if (postData) {
+        setPost(postData);
+        setAuthor(postData.author);
+      }
+      setLoading(false);
+    };
+    fetchData();
+  }, [postID]);
+
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="animate-spin h-10 w-10 text-ecly-green" /></div>;
+  if (!post) return <div className="p-20 text-center font-black">Artículo no encontrado</div>;
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden font-sans bg-white">
+    <div className="relative flex min-h-screen w-full flex-col bg-white">
       <Header />
       <main className="flex-1 pt-32 pb-24">
         <article className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          {/* Back Button */}
           <Link to="/blog" className="inline-flex items-center gap-2 text-slate-400 hover:text-ecly-green font-bold mb-12 transition-colors">
             <ArrowLeft className="h-4 w-4" /> Volver al Blog
           </Link>
 
-          {/* Meta Info */}
           <div className="flex items-center gap-6 mb-8 text-sm font-bold text-slate-400">
             <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" /> {post.date}
+              <Calendar className="h-4 w-4" /> {new Date(post.created_at).toLocaleDateString()}
             </div>
             <div className="flex items-center gap-2">
-              <User className="h-4 w-4" /> {post.author}
+              <User className="h-4 w-4" /> {author?.first_name || 'Equipo Ecly'}
             </div>
-            <span className="px-3 py-1 bg-ecly-light text-ecly-green rounded-full text-[10px] uppercase tracking-widest font-black">
-              {post.category}
-            </span>
           </div>
 
-          {/* Title */}
           <h1 className="text-4xl md:text-6xl font-black text-slate-900 mb-8 leading-tight">
             {post.title}
           </h1>
 
-          {/* Featured Image */}
           <div className="aspect-video rounded-[3rem] overflow-hidden mb-12 shadow-2xl">
-            <img 
-              src={post.image} 
-              alt={post.title}
-              className="w-full h-full object-cover"
-            />
+            <img src={post.image_url} alt={post.title} className="w-full h-full object-cover"/>
           </div>
 
-          {/* Content */}
-          <div className="prose prose-lg max-w-none prose-slate">
+          <div className="prose prose-lg max-w-none mb-16">
             <p className="text-xl md:text-2xl font-medium text-slate-600 leading-relaxed mb-8 italic border-l-4 border-ecly-vibrant pl-6">
               {post.excerpt}
             </p>
-            <div className="text-lg text-slate-700 font-medium leading-loose space-y-6">
+            <div className="text-lg text-slate-700 font-medium leading-loose whitespace-pre-wrap">
               {post.content}
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             </div>
           </div>
 
-          {/* Share & Footer of Article */}
-          <div className="mt-16 pt-8 border-t border-slate-100 flex items-center justify-between">
-            <div className="flex gap-4">
-              <Button variant="outline" className="rounded-full font-black border-slate-200 hover:bg-slate-50 gap-2">
-                <Share2 className="h-4 w-4" /> Compartir
-              </Button>
+          {/* Caja del Autor */}
+          <div className="bg-slate-50 p-8 sm:p-12 rounded-[3rem] flex flex-col md:flex-row gap-8 items-center md:items-start border border-slate-100">
+            <div className="h-24 w-24 rounded-[1.5rem] overflow-hidden bg-white shrink-0 shadow-sm">
+              {author?.avatar_url ? <img src={author.avatar_url} className="w-full h-full object-cover"/> : <UserCircle className="w-full h-full p-4 text-slate-200"/>}
             </div>
-            <Link to="/#waitlist">
-              <Button className="bg-ecly-green hover:bg-green-700 text-white font-black rounded-full px-8">
-                Sumarme a Ecly
-              </Button>
-            </Link>
+            <div className="text-center md:text-left">
+              <h4 className="text-2xl font-black text-slate-900 mb-2">Escrito por {author?.first_name || 'Equipo Ecly'}</h4>
+              <p className="text-slate-500 font-bold leading-relaxed">
+                {author?.bio || 'Colaborador apasionado por la sustentabilidad y el cambio circular en Córdoba.'}
+              </p>
+            </div>
           </div>
         </article>
       </main>

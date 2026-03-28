@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/components/auth/AuthProvider';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
@@ -11,13 +11,22 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { PlusCircle, FileText, LayoutDashboard, LogOut, Loader2, ShieldAlert } from 'lucide-react';
+import { PlusCircle, FileText, LogOut, Loader2, UserCircle, Edit3, Trash2 } from 'lucide-react';
 
 const AdminDashboard = () => {
-  const { user, role, loading, signOut } = useAuth();
+  const { user, profile, loading, signOut, refreshProfile } = useAuth();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
+  const [myPosts, setMyPosts] = useState<any[]>([]);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  
+  const [onboardingData, setOnboardingData] = useState({
+    first_name: '',
+    bio: '',
+    avatar_url: ''
+  });
+
+  const [postData, setPostData] = useState({
     title: '',
     excerpt: '',
     content: '',
@@ -25,179 +34,170 @@ const AdminDashboard = () => {
     image_url: ''
   });
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
-        <Loader2 className="h-12 w-12 text-ecly-green animate-spin mb-4" />
-        <p className="font-black text-slate-900">Verificando permisos...</p>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (!loading && profile && (!profile.first_name || !profile.bio)) {
+      setShowOnboarding(true);
+    }
+    if (user) fetchMyPosts();
+  }, [loading, profile, user]);
 
-  // Si no hay usuario o el rol no es editor/admin, mostrar aviso de falta de permisos
-  if (!user || (role !== 'editor' && role !== 'admin')) {
+  const fetchMyPosts = async () => {
+    const { data } = await supabase
+      .from('blog_posts')
+      .select('*')
+      .eq('author_id', user?.id)
+      .order('created_at', { ascending: false });
+    if (data) setMyPosts(data);
+  };
+
+  const handleOnboardingSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    const { error } = await supabase
+      .from('profiles')
+      .update(onboardingData)
+      .eq('id', user?.id);
+
+    if (error) {
+      toast.error("Error al actualizar perfil");
+    } else {
+      toast.success("¡Perfil completado!");
+      await refreshProfile();
+      setShowOnboarding(false);
+    }
+    setIsSubmitting(false);
+  };
+
+  const handlePostSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    const slug = postData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+    const { error } = await supabase
+      .from('blog_posts')
+      .insert([{ ...postData, slug, author_id: user?.id, published: true }]);
+
+    if (error) {
+      toast.error("Error al publicar: " + error.message);
+    } else {
+      toast.success("¡Publicación creada!");
+      setPostData({ title: '', excerpt: '', content: '', category: 'Sustentabilidad', image_url: '' });
+      fetchMyPosts();
+    }
+    setIsSubmitting(false);
+  };
+
+  const deletePost = async (id: string) => {
+    if (!confirm("¿Seguro que quieres borrar este post?")) return;
+    const { error } = await supabase.from('blog_posts').delete().eq('id', id);
+    if (!error) {
+      toast.success("Post eliminado");
+      fetchMyPosts();
+    }
+  };
+
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="animate-spin h-10 w-10 text-ecly-green" /></div>;
+  if (!user) return <div className="p-20 text-center font-black">Acceso denegado</div>;
+
+  if (showOnboarding) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 p-4 text-center">
-        <div className="bg-white p-12 rounded-[3rem] shadow-xl max-w-md border-4 border-white">
-          <ShieldAlert className="h-20 w-20 text-ecly-pop mx-auto mb-6" />
-          <h1 className="text-3xl font-black text-slate-900 mb-4">Acceso Denegado</h1>
-          <p className="text-slate-500 font-bold mb-8">
-            Tu cuenta está registrada como <span className="text-ecly-pop uppercase">{role || 'Sin Rol'}</span>. 
-            Necesitas permisos de Editor para entrar aquí.
-          </p>
-          <div className="flex flex-col gap-4">
-            <Button onClick={() => navigate('/')} className="rounded-full bg-slate-900 font-black py-6">
-              Volver al Inicio
+      <div className="min-h-screen bg-ecly-light flex items-center justify-center p-4">
+        <div className="bg-white p-10 rounded-[3rem] shadow-2xl max-w-lg w-full">
+          <h2 className="text-3xl font-black text-slate-900 mb-2">¡Bienvenido Editor!</h2>
+          <p className="text-slate-500 font-bold mb-8">Completa tu perfil para empezar a publicar.</p>
+          <form onSubmit={handleOnboardingSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <Label className="font-black text-xs uppercase">Tu Nombre Público</Label>
+              <Input placeholder="Ej: Juan Pérez" value={onboardingData.first_name} onChange={e => setOnboardingData({...onboardingData, first_name: e.target.value})} required className="rounded-xl py-6 font-bold"/>
+            </div>
+            <div className="space-y-2">
+              <Label className="font-black text-xs uppercase">Breve Biografía</Label>
+              <Textarea placeholder="Sobre ti..." value={onboardingData.bio} onChange={e => setOnboardingData({...onboardingData, bio: e.target.value})} required className="rounded-xl font-bold"/>
+            </div>
+            <div className="space-y-2">
+              <Label className="font-black text-xs uppercase">URL de Avatar</Label>
+              <Input placeholder="https://..." value={onboardingData.avatar_url} onChange={e => setOnboardingData({...onboardingData, avatar_url: e.target.value})} className="rounded-xl font-bold"/>
+            </div>
+            <Button type="submit" disabled={isSubmitting} className="w-full bg-ecly-green hover:bg-green-600 text-white font-black py-8 rounded-2xl shadow-[0_8px_0_0_#16a34a]">
+              Empezar ahora
             </Button>
-            <Button variant="ghost" onClick={() => signOut()} className="font-bold text-slate-400">
-              Cerrar Sesión
-            </Button>
-          </div>
+          </form>
         </div>
       </div>
     );
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    const slug = formData.title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '');
-
-    try {
-      const { error } = await supabase
-        .from('blog_posts')
-        .insert([{
-          ...formData,
-          slug,
-          author_id: user.id,
-          published: true
-        }]);
-
-      if (error) throw error;
-
-      toast.success("¡Publicación creada con éxito!");
-      setFormData({ title: '', excerpt: '', content: '', category: 'Sustentabilidad', image_url: '' });
-      navigate('/blog');
-    } catch (error: any) {
-      toast.error("Error al crear la publicación: " + error.message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-slate-50">
       <Header />
-      <main className="flex-1 pt-32 pb-24">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
-            <div>
-              <h1 className="text-4xl font-black text-slate-900">Panel de Editor</h1>
-              <p className="text-slate-500 font-bold mt-2">Bienvenido, {user.email}</p>
+      <main className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="flex justify-between items-center mb-12">
+          <div>
+            <h1 className="text-4xl font-black text-slate-900">Panel de Control</h1>
+            <p className="font-bold text-ecly-green">Hola, {profile?.first_name}</p>
+          </div>
+          <Button variant="outline" onClick={() => signOut()} className="rounded-full font-black gap-2">
+            <LogOut className="h-4 w-4" /> Salir
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          <div className="lg:col-span-8 space-y-12">
+            {/* Formulario de Creación */}
+            <div className="bg-white p-8 rounded-[3rem] shadow-sm">
+              <h2 className="text-2xl font-black mb-8">Crear nuevo post</h2>
+              <form onSubmit={handlePostSubmit} className="space-y-6">
+                <Input placeholder="Título" value={postData.title} onChange={e => setPostData({...postData, title: e.target.value})} required className="py-6 font-bold"/>
+                <Textarea placeholder="Resumen corto" value={postData.excerpt} onChange={e => setPostData({...postData, excerpt: e.target.value})} required className="font-bold"/>
+                <Textarea placeholder="Contenido completo" value={postData.content} onChange={e => setPostData({...postData, content: e.target.value})} required className="min-h-[200px] font-bold"/>
+                <Input placeholder="URL Imagen" value={postData.image_url} onChange={e => setPostData({...postData, image_url: e.target.value})} required className="font-bold"/>
+                <Button type="submit" disabled={isSubmitting} className="w-full bg-slate-900 text-white font-black py-8 rounded-2xl">
+                  Publicar Artículo
+                </Button>
+              </form>
             </div>
-            <Button 
-              variant="outline" 
-              onClick={() => signOut()}
-              className="rounded-full font-black border-2 border-slate-200 gap-2 px-6"
-            >
-              <LogOut className="h-4 w-4" /> Cerrar Sesión
-            </Button>
+
+            {/* Mis Publicaciones */}
+            <div className="space-y-6">
+              <h2 className="text-2xl font-black">Mis Publicaciones</h2>
+              <div className="grid gap-4">
+                {myPosts.map(post => (
+                  <div key={post.id} className="bg-white p-6 rounded-2xl flex justify-between items-center shadow-sm">
+                    <div>
+                      <h3 className="font-black text-lg">{post.title}</h3>
+                      <p className="text-xs text-slate-400 font-bold">{new Date(post.created_at).toLocaleDateString()}</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="ghost" size="icon" className="text-slate-400 hover:text-ecly-green">
+                        <Edit3 className="h-5 w-5" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="text-slate-400 hover:text-ecly-pop" onClick={() => deletePost(post.id)}>
+                        <Trash2 className="h-5 w-5" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            <div className="lg:col-span-4 space-y-6">
-              <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="bg-ecly-light p-3 rounded-2xl">
-                    <LayoutDashboard className="h-6 w-6 text-ecly-green" />
-                  </div>
-                  <h2 className="text-xl font-black">Acciones Rápidas</h2>
+          <div className="lg:col-span-4">
+            <div className="bg-ecly-dark text-white p-8 rounded-[3rem] sticky top-32">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="h-16 w-16 rounded-2xl overflow-hidden bg-white/20">
+                  {profile?.avatar_url ? <img src={profile.avatar_url} className="w-full h-full object-cover"/> : <UserCircle className="w-full h-full p-2"/>}
                 </div>
-                <div className="space-y-4">
-                  <Button className="w-full justify-start gap-3 bg-slate-900 hover:bg-ecly-green text-white rounded-2xl py-6 font-bold transition-all">
-                    <PlusCircle className="h-5 w-5" /> Nueva Publicación
-                  </Button>
-                  <Button variant="ghost" className="w-full justify-start gap-3 text-slate-500 hover:text-slate-900 rounded-2xl py-6 font-bold" onClick={() => navigate('/blog')}>
-                    <FileText className="h-5 w-5" /> Ver Blog Público
-                  </Button>
+                <div>
+                  <h3 className="font-black text-xl">{profile?.first_name}</h3>
+                  <p className="text-ecly-vibrant font-black text-xs uppercase tracking-widest">Editor</p>
                 </div>
               </div>
-            </div>
-
-            <div className="lg:col-span-8">
-              <div className="bg-white p-8 sm:p-12 rounded-[3rem] shadow-sm border border-slate-100">
-                <h3 className="text-2xl font-black text-slate-900 mb-8">Crear nuevo artículo</h3>
-                
-                <form onSubmit={handleSubmit} className="space-y-8">
-                  <div className="space-y-3">
-                    <Label className="text-xs font-black uppercase tracking-widest text-slate-500">Título del artículo</Label>
-                    <Input 
-                      placeholder="Ej: El impacto del plástico en Córdoba"
-                      value={formData.title}
-                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                      className="py-6 px-6 rounded-2xl border-2 border-slate-100 focus:border-ecly-green focus-visible:ring-0 font-bold text-lg"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-3">
-                    <Label className="text-xs font-black uppercase tracking-widest text-slate-500">Resumen (Excerpt)</Label>
-                    <Textarea 
-                      placeholder="Una breve descripción..."
-                      value={formData.excerpt}
-                      onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
-                      className="min-h-[100px] py-4 px-6 rounded-2xl border-2 border-slate-100 focus:border-ecly-green focus-visible:ring-0 font-bold"
-                      required
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="space-y-3">
-                      <Label className="text-xs font-black uppercase tracking-widest text-slate-500">Categoría</Label>
-                      <select 
-                        className="flex h-12 w-full items-center justify-between rounded-2xl border-2 border-slate-100 bg-white px-4 py-2 font-bold focus:outline-none focus:border-ecly-green"
-                        value={formData.category}
-                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                        required
-                      >
-                        <option value="Sustentabilidad">Sustentabilidad</option>
-                        <option value="Comunidad">Comunidad</option>
-                        <option value="Economía">Economía</option>
-                        <option value="Tecnología">Tecnología</option>
-                      </select>
-                    </div>
-                    <div className="space-y-3">
-                      <Label className="text-xs font-black uppercase tracking-widest text-slate-500">URL de Imagen</Label>
-                      <Input 
-                        placeholder="https://images.unsplash.com/..."
-                        value={formData.image_url}
-                        onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                        className="py-6 px-6 rounded-2xl border-2 border-slate-100 focus:border-ecly-green focus-visible:ring-0 font-bold"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    <Label className="text-xs font-black uppercase tracking-widest text-slate-500">Contenido completo</Label>
-                    <Textarea 
-                      placeholder="Escribe el cuerpo del artículo..."
-                      value={formData.content}
-                      onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                      className="min-h-[300px] py-4 px-6 rounded-2xl border-2 border-slate-100 focus:border-ecly-green focus-visible:ring-0 font-bold"
-                      required
-                    />
-                  </div>
-                  <Button 
-                    type="submit" 
-                    disabled={isSubmitting}
-                    className="w-full py-8 text-xl font-black bg-ecly-green hover:bg-green-600 text-white rounded-[2rem] shadow-[0_8px_0_0_#16a34a] hover:translate-y-1 transition-all active:translate-y-2"
-                  >
-                    {isSubmitting ? "Publicando..." : "Publicar Artículo"}
-                  </Button>
-                </form>
-              </div>
+              <p className="text-slate-300 font-bold text-sm leading-relaxed mb-8">
+                {profile?.bio}
+              </p>
+              <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10 font-black rounded-xl py-6" onClick={() => setShowOnboarding(true)}>
+                Editar Perfil
+              </Button>
             </div>
           </div>
         </div>
