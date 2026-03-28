@@ -14,63 +14,29 @@ const Access = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Si ya hay sesión, redirigir al panel
     if (session) {
-      navigate('/admin');
+      navigate('/dashboard');
     }
   }, [session, navigate]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-ecly-light">
-        <div className="animate-bounce text-ecly-green font-black text-2xl">Cargando Ecly...</div>
-      </div>
-    );
-  }
+  if (loading) return null;
 
   return (
     <div className="min-h-screen bg-ecly-light flex flex-col">
       <Header />
       <main className="flex-1 flex items-center justify-center p-4 pt-32 pb-24">
-        <div className="w-full max-w-md bg-white rounded-[3rem] shadow-2xl p-8 sm:p-12 border-4 border-white transition-all duration-500">
+        <div className="w-full max-w-md bg-white rounded-[3rem] shadow-2xl p-10 border-4 border-white">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-black text-slate-900 mb-2">Acceso Editor</h1>
-            <p className="text-slate-500 font-bold">Uso exclusivo para personal de Ecly</p>
+            <h1 className="text-3xl font-black text-slate-900 mb-2">Editor Ecly</h1>
+            <p className="text-slate-500 font-bold">Accede para publicar novedades</p>
           </div>
-          
           <Auth
             supabaseClient={supabase}
             view="sign_in"
             showLinks={false}
-            appearance={{ 
-              theme: ThemeSupa,
-              variables: {
-                default: {
-                  colors: {
-                    brand: '#22c55e',
-                    brandAccent: '#16a34a',
-                  }
-                }
-              }
-            }}
+            appearance={{ theme: ThemeSupa, variables: { default: { colors: { brand: '#22c55e', brandAccent: '#16a34a' } } } }}
             providers={[]}
-            localization={{
-              variables: {
-                sign_in: {
-                  email_label: 'Correo electrónico',
-                  password_label: 'Contraseña',
-                  button_label: 'Entrar al Panel',
-                  email_input_placeholder: 'tu@ecly.com',
-                  password_input_placeholder: 'Tu contraseña secreta',
-                }
-              }
-            }}
           />
-          <div className="mt-6 text-center">
-            <p className="text-xs text-slate-400 font-bold italic">
-              * Si no tienes credenciales, contacta al administrador del sistema.
-            </p>
-          </div>
         </div>
       </main>
       <Footer />
