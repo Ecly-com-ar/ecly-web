@@ -210,24 +210,22 @@ const Dashboard = () => {
                   )}
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex flex-col gap-6">
                   <div className="space-y-2">
                     <Label className="font-black text-xs uppercase text-slate-400 ml-2">Resumen</Label>
                     <Textarea value={postData.excerpt} onChange={e => setPostData({...postData, excerpt: e.target.value})} required className="font-bold h-24 rounded-2xl border-2"/>
                   </div>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label className="font-black text-xs uppercase text-slate-400 ml-2">Categoría</Label>
-                      <select className="flex h-14 w-full items-center justify-between rounded-xl border-2 border-slate-200 bg-background px-4 font-bold appearance-none" value={postData.category} onChange={e => setPostData({...postData, category: e.target.value})}>
-                        <option>Sustentabilidad</option>
-                        <option>Comunidad</option>
-                        <option>Empresa</option>
-                      </select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="font-black text-xs uppercase text-slate-400 ml-2">Imagen URL</Label>
-                      <Input value={postData.image_url} onChange={e => setPostData({...postData, image_url: e.target.value})} required className="font-bold h-14 rounded-xl border-2"/>
-                    </div>
+                  <div className="space-y-2">
+                    <Label className="font-black text-xs uppercase text-slate-400 ml-2">Categoría</Label>
+                    <select className="flex h-14 w-full items-center justify-between rounded-xl border-2 border-slate-200 bg-background px-4 font-bold appearance-none" value={postData.category} onChange={e => setPostData({...postData, category: e.target.value})}>
+                      <option>Sustentabilidad</option>
+                      <option>Comunidad</option>
+                      <option>Empresa</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="font-black text-xs uppercase text-slate-400 ml-2">Imagen URL</Label>
+                    <Input value={postData.image_url} onChange={e => setPostData({...postData, image_url: e.target.value})} required className="font-bold h-14 rounded-xl border-2"/>
                   </div>
                 </div>
 
