@@ -24,8 +24,12 @@ const Access = () => {
   if (loading || session) {
     return (
       <div className="min-h-screen bg-ecly-light flex items-center justify-center">
-        <div className="animate-pulse flex flex-col items-center gap-4">
-          <div className="h-12 w-12 bg-ecly-green rounded-full"></div>
+        <div className="animate-pulse flex flex-col items-center gap-6">
+          <img 
+            src="/Ecly_Logotype.png" 
+            alt="Ecly Logo" 
+            className="h-16 w-auto object-contain grayscale opacity-50"
+          />
           <p className="font-black text-slate-400 uppercase tracking-widest text-xs">Verificando acceso...</p>
         </div>
       </div>
